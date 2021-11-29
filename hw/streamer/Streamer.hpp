@@ -44,9 +44,9 @@ public:
 
     {
 
-        auto* generatorThread=new QThread();
+      generatorThread=new QThread(this);
         frameGenerator_->moveToThread(generatorThread);
-        auto* channelThread=new QThread();
+         channelThread=new QThread(this);
         channel_->moveToThread(channelThread);
         this->moveToThread(channelThread);
 
@@ -77,9 +77,10 @@ public:
     //====================================================================================
     void Stop(){
 
+         stopped_.clear();
         emit StopSignal();
         emit stopped();
-        stopped_.clear();
+
     }
     //====================================================================================
     void StartProcess(QString)
@@ -88,7 +89,10 @@ public:
         while(stopped_.test_and_set())
         {
              QCoreApplication::processEvents(QEventLoop::ExcludeUserInputEvents);
-
+if(!stopped_.test_and_set())
+{
+    return;
+}
             //get desktop snapshot
              auto copyOfFrame=FrameManager::GetInstance().GetCopyFromFrame();
              if(copyOfFrame.first!=nullptr && copyOfFrame.second!=0)
@@ -112,5 +116,8 @@ private:
  std::unique_ptr<FrameGenerator> frameGenerator_;
  std::unique_ptr<Channel> channel_;
  std::atomic_flag stopped_;
+ QThread* generatorThread;
+ QThread* channelThread;
+
 
 };

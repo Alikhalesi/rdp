@@ -70,6 +70,7 @@ assert(hr==S_OK);
        }
 
        delete image;
+
        GdiplusShutdown(gdiplusToken);
 
 }

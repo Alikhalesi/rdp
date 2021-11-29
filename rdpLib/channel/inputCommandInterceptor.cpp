@@ -5,12 +5,15 @@ void InputCommandInterceptor::dataInput(QVariant data)
 
 
 QByteArray dt=data.toByteArray();
-  inputCommand cmd;
- inputCommand* sended= (inputCommand*) dt.data();
- cmd.type=sended->type;
- cmd.cmd=sended->cmd;
 
- qDebug()<<(int)cmd.type;
+  inputCommand cmd;
+  memcpy(&cmd,dt.data(),sizeof (inputCommand));
+// inputCommand* sended= (inputCommand*) dt.data();
+// cmd.type=sended->type;
+// cmd.occurance=sended->occurance;
+// cmd.cmd=sended->cmd;
+
+ qDebug()<<(int)cmd.type<<dt.size();
         emit dataOutput(QVariant::fromValue(cmd));
 }
 //===========================================================================================

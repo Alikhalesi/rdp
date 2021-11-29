@@ -78,6 +78,7 @@ void ServerTcpChannel::readyRead()
 {
     qDebug()<<"readyRead ---------------------";
     auto data=client_->readAll();
+
     emit dataReadyInternal(data);
 }
 //==================================================================================================

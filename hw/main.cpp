@@ -1,6 +1,6 @@
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
-
+#include <rxqt.hpp>
 #include <QLocale>
 #include <QTranslator>
 #include "streamer/Streamer.hpp"
@@ -11,6 +11,9 @@
 #include <QQmlContext>
 #include "components/FrameImageProvider.hpp"
 #include "controller/commandController.hpp"
+#include "managers/DefaultCommandManager.hpp"
+
+
 int main(int argc, char *argv[])
 {
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
@@ -18,7 +21,7 @@ int main(int argc, char *argv[])
 #endif
 
     QGuiApplication app(argc, argv);
-
+  rxqt::run_loop rxqt_run_loop;
     QTranslator translator;
     const QStringList uiLanguages = QLocale::system().uiLanguages();
     for (const QString &locale : uiLanguages) {
@@ -40,7 +43,7 @@ int main(int argc, char *argv[])
 
     QQmlApplicationEngine engine;
 auto* serverController=new ServerController();
-auto* commandController=new CommandController();
+auto* commandController=new CommandController(std::make_unique<DefaultCommandManager>());
     engine.rootContext()->setContextProperty( "_serverController", serverController );
 engine.rootContext()->setContextProperty( "_commandController", commandController );
 //serverController->start();

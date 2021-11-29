@@ -8,6 +8,10 @@
 #include <QVariant>
 #include <Windows.h>
 #include <QNetworkProxyFactory>
+#include <model/command.hpp>
+#include <mutex>
+#include <stdlib.h>
+
 class RDPLIB_EXPORT ClientTcpChannel : public QObject
 {
     Q_OBJECT
@@ -24,20 +28,23 @@ void disconnected();
 void dataReadyInternal(QVariant data);
 void dataReady(QVariant data);
 
+void Error(const QString& err);
 public:
 
-void Send(const char* data,int len);
+
 QByteArray Receive();
 
 void Disconnect();
  public slots:
-
+void SocketError(QAbstractSocket::SocketError socketError);
+void Send(const char* data,int len);
+void SendAndDelete(std::shared_ptr<char[]> data,int len);
 void Start(const QString& ip,int port);
 private:
 void ConnectToHost(const QString& ip,int port);
-QTcpSocket* socket_;
+QTcpSocket* socket_=nullptr;
 std::vector<std::unique_ptr<IChannelInterceptor>> interceptors_;
-
+std::recursive_mutex syncLock_;
  private slots:
 void readyRead();
 

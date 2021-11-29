@@ -7,6 +7,9 @@ static HMODULE GetThisDllHandle()
   return len ? (HMODULE)info.AllocationBase : NULL;
 }
 //==================================================================
+
+
+
 LRESULT CALLBACK MouseProc(
   _In_ int    nCode,
   _In_ WPARAM wParam,
@@ -14,7 +17,7 @@ LRESULT CALLBACK MouseProc(
 )
 {
     MouseCommand mouseCommand{0};
-    qDebug()<<"Hook MouseProc Called"<<wParam;
+
 MOUSEHOOKSTRUCT* info=(MOUSEHOOKSTRUCT*) lParam;
 mouseCommand.x=info->pt.x;
 mouseCommand.y=info->pt.y;
@@ -22,8 +25,9 @@ mouseCommand.code=wParam;
 inputCommand cmd;
 cmd.type=commandType::Mouse;
 cmd.cmd.mouseCommand=mouseCommand;
-
-HookManager::GetInstance().EmitNewCommand(cmd);
+auto* hookManagerInstance=QThreadStorage<HookManager*>{}.localData();
+qDebug()<<"Hook mouseproc Called"<<hookManagerInstance;
+hookManagerInstance->EmitNewCommand(cmd);
     return    CallNextHookEx(0,nCode,wParam,lParam);
 
 }
@@ -35,16 +39,10 @@ LRESULT CALLBACK KeyboardProc(
 )
 {
 
- qDebug()<<"Hook KeyboardProc Called";
    return    CallNextHookEx(0,code,wParam,lParam);
 }
 //==================================================================
-HookManager& HookManager::GetInstance()
-{
-    static HookManager * instance_=new HookManager();
-    return *instance_;
-}
-//==================================================================
+
 void HookManager::Start()
 {
      mouseHook_= SetWindowsHookExA(WH_MOUSE,MouseProc,GetThisDllHandle(),GetThreadId(QThread::currentThreadId()));
@@ -73,6 +71,7 @@ void HookManager::Stop()
 //==================================================================
 void HookManager::EmitNewCommand(inputCommand cmd)
 {
+
     emit newCommand(cmd);
 }
 //==================================================================

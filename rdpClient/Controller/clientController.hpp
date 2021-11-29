@@ -17,10 +17,12 @@ public:
     void connected();
     void disconnected();
     void imageChanged();
+      void error(const QString& err);
 public slots:
-    void start(QString ipPort);
+    void start(QString ip);
     void stop();
     void newImage(QVariant data);
+    void onError(const QString& err);
 private:
  ClientTcpChannel* channel_;
 

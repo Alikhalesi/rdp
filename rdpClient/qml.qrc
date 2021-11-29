@@ -1,5 +1,15 @@
 <RCC>
     <qresource prefix="/">
-        <file>main.qml</file>
+
+        <file>ui/Constants.qml</file>
+        <file>ui/DangerButton.qml</file>
+        <file>ui/DefaultButton.qml</file>
+        <file>ui/Dropdown.qml</file>
+        <file>ui/FlatRadioButton.qml</file>
+        <file>ui/FlatSlider.qml</file>
+        <file>ui/Input.qml</file>
+        <file>ui/PrimaryButton.qml</file>
+        <file>ui/WarningButton.qml</file>
+        <file>ui/main.qml</file>
     </qresource>
 </RCC>

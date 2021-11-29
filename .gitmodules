@@ -1,0 +1,3 @@
+[submodule "rxqt"]
+	path = rxqt
+	url = https://github.com/tetsurom/rxqt.git

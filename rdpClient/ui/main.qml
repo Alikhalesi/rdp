@@ -1,7 +1,6 @@
 import QtQuick  2.15
 import QtQuick.Controls
-import Qt.labs.platform
-
+import QtQuick.Controls.Universal 2.3
 
 ApplicationWindow {
     visible: true
@@ -10,6 +9,7 @@ ApplicationWindow {
     header: ToolBar {
            Flow {
                anchors.fill: parent
+
                ToolButton {
                    id:btnStart
                    text: qsTr("Start")
@@ -20,9 +20,9 @@ ApplicationWindow {
                         statusIndicator.color="yellow";
                        btnStart.visible=false;
                        btnStop.visible=true;
-
-                       _clientController.start(txtIp.text)
-
+                       lblError.text="";
+                     //  _clientController.start(txtIp.text)
+                        _commandController.start(txtIp.text)
                    }
                }
                ToolButton {
@@ -34,15 +34,18 @@ ApplicationWindow {
                        lblClient.text="Disconnecting..."
 
                        _clientController.stop()
-
+                        _commandController.stop()
                    }
                }
 
                TextField
                {
+                   width: 80
+
                    id:txtIp
-                   placeholderText: qsTr("127.0.0.1:8084")
-                   validator: RegularExpressionValidator { regularExpression: /\b(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?):\d{1,5}\b/ }
+                   placeholderText: qsTr("127.0.0.1")
+
+                   validator: RegularExpressionValidator { regularExpression: /\b(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\b/ }
                }
 
 
@@ -77,6 +80,19 @@ ApplicationWindow {
              radius: width*0.5
 
         }
+        Label
+        {
+           // anchors.right: 0
+            id:lblError
+            text:qsTr("")
+
+        }
+
+//      PrimaryButton
+//        {
+//            text: "start"
+//        }
+
         }
 
 
@@ -89,6 +105,7 @@ ApplicationWindow {
             lblClient.text = "Connected"
              statusIndicator.color="green"
             txtIp.visible=false
+            _commandController.start()
            }
 
            onImageChanged:function()
@@ -107,6 +124,50 @@ ApplicationWindow {
                btnStart.visible=true
                btnStop.visible=false
            }
+           onError:function(err)
+           {
+               lblError.text = err;
+               statusIndicator.color="red"
+               centerImg.source="";
+               txtIp.visible=true
+               btnStart.visible=true
+               btnStop.visible=false
+             // _commandController.stop()
+           }
+       }
+
+    Connections {
+        target: _commandController
+
+
+           onError:function(err)
+           {
+               lblError.text = err;
+               statusIndicator.color="red"
+               centerImg.source="";
+               txtIp.visible=true
+               btnStart.visible=true
+               btnStop.visible=false
+              _clientController.stop()
+           }
+           onConnected: function() {
+              //  centerImg.source="image://_frameImageProvider"
+               lblClient.text = "Connected"
+                statusIndicator.color="green"
+               txtIp.visible=false
+
+              }
+
+
+              onDisconnected:function()
+              {
+                  lblClient.text = "Disconnected";
+                  statusIndicator.color="red"
+                  centerImg.source="";
+                  txtIp.visible=true
+                  btnStart.visible=true
+                  btnStop.visible=false
+              }
        }
 
     MouseArea {

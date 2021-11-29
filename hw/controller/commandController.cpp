@@ -1,5 +1,6 @@
 #include "commandController.hpp"
-CommandController::CommandController(QObject *parent)
+CommandController::CommandController( std::unique_ptr<ICommandManager>&& commandManager,QObject *parent)
+    :QObject(parent),commandManager_{std::move(commandManager)}
 {
 
 }
@@ -14,21 +15,25 @@ void CommandController::start()
    //    connect(channel_,SIGNAL(connected()),this,SIGNAL(connected()));
    //    connect(channel_,SIGNAL(disconnected()),this,SIGNAL(disconnected()));
         connect(channel_,SIGNAL(dataReady(QVariant)),this,SLOT(newCommand(QVariant)));
+
+
+
+
 channel_->Start();
 
 }
 //==========================================================================================
 void CommandController::stop()
 {
-
+channel_->Stop();
 }
 //==========================================================================================
 void CommandController::newCommand(QVariant val)
 {
     inputCommand cmd=val.value<inputCommand>();
-    qDebug()<<"cmd received : "<<(int) cmd.type;
+    qDebug()<<"cmd received : "<<(int) ((commandType) cmd.type);
     //
-
+   commandManager_->ApplyCommand(cmd);
 
 
 }

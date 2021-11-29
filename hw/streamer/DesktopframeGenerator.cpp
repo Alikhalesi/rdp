@@ -14,9 +14,15 @@ void DesktopFrameGenerator::Start(QString cnnInfo)
     while(stopped_.test_and_set())
     {
          QCoreApplication::processEvents(QEventLoop::ExcludeUserInputEvents);
+
+         if(!stopped_.test_and_set())
+         {
+             return;
+         }
+
         //get desktop snapshot
         //emit signal
-         Sleep(1000);
+      //   Sleep(1000);
         UpdateCurrentFrame();
 
         //emit NewFrame(frameData.first,frameData.second);

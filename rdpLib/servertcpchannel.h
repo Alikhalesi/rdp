@@ -7,6 +7,7 @@
 #include "channel/IChannelInterceptor.hpp"
 #include <vector>
 #include <QVariant>
+#include <model/command.hpp>
 #include "rdpLib_global.h"
 class RDPLIB_EXPORT ServerTcpChannel:public QObject
 {

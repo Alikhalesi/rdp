@@ -7,15 +7,16 @@ LRESULT CALLBACK MouseProc(
   _In_ LPARAM lParam
 )
 {
-    MouseCommand mouseCommand{0};
+
     qDebug()<<"Hook MouseProc Called"<<wParam;
 MOUSEHOOKSTRUCT* info=(MOUSEHOOKSTRUCT*) lParam;
-mouseCommand.x=info->pt.x;
-mouseCommand.y=info->pt.y;
-mouseCommand.code=wParam;
+
 inputCommand cmd;
+//cmd.occurance=QTime::currentTime();
 cmd.type=commandType::Mouse;
-cmd.cmd.mouseCommand=mouseCommand;
+cmd.cmd.mouseCommand.code=wParam;
+cmd.cmd.mouseCommand.x=info->pt.x;
+cmd.cmd.mouseCommand.y=info->pt.y;
 
 LocalHookManager::GetInstance().EmitNewCommand(cmd);
     return    CallNextHookEx(0,nCode,wParam,lParam);
@@ -28,8 +29,14 @@ LRESULT CALLBACK KeyboardProc(
   _In_ LPARAM lParam
 )
 {
-
+    inputCommand cmd;
+    cmd.type=commandType::Keyboard;
+    //cmd.occurance=QTime::currentTime();
+    cmd.cmd.keyboardCommand.keyCode=wParam;
+    cmd.cmd.keyboardCommand.code=lParam;
  qDebug()<<"Hook KeyboardProc Called";
+
+ LocalHookManager::GetInstance().EmitNewCommand(cmd);
    return    CallNextHookEx(0,code,wParam,lParam);
 }
 //==================================================================
