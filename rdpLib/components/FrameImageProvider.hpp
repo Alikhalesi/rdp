@@ -5,6 +5,7 @@
 #include <QFont>
 #include <QObject>
 #include <QDebug>
+#include <mutex>
 #include "rdpLib_global.h"
 class RDPLIB_EXPORT FrameImageProvider: public QQuickImageProvider
 {
@@ -27,5 +28,6 @@ private :
    std::pair<unsigned char*,unsigned int> imageLen_;
    static FrameImageProvider* instance_;
    QImage frame_;
+std::mutex frameLock_;
 
 };

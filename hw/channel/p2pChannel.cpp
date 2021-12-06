@@ -30,9 +30,12 @@ void P2PChannel::NewFrame(unsigned char *data, unsigned int len)
       //  qDebug()<<"NewFrame\n";
       client_->write((char*)(&len),sizeof(unsigned int));
        client_->waitForBytesWritten();
+       if(client_!=nullptr &&   client_->state()==QAbstractSocket::ConnectedState)
+       {
      auto written= client_->write((char*)(data),len);
 
      client_->waitForBytesWritten();
+       }
     }
 
 }
@@ -40,9 +43,14 @@ void P2PChannel::NewFrame(unsigned char *data, unsigned int len)
 void P2PChannel::disconnectd()
 {
     qDebug()<<"Disconnected ---------------------";
+    if(client_!=nullptr)
+    {
+
     client_->close();
     client_=nullptr;
     emit clientDisconnected();
+    }
+
 }
 //==================================================================================================
 void P2PChannel::Listen(int port)

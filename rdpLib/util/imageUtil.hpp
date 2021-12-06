@@ -11,7 +11,13 @@
 class RDPLIB_EXPORT ImageUtil
 {
 public:
-    static void ConvertImage(const std::string& destFormat,HBITMAP input,unsigned char* output,unsigned int* len);
+    ImageUtil();
+     void ConvertHBitmapToJpegImage(HBITMAP input,unsigned char* output,unsigned int* len);
+     void ConvertJPegToHbitmap(unsigned char* input,unsigned int len,HWND handle);
+
+     ~ImageUtil();
 private:
-    static int GetEncoderClsid(const WCHAR* format, CLSID* pClsid);
+     int GetEncoderClsid(const WCHAR* format, CLSID* pClsid);
+     BOOL DrawBitmap (HWND hDC,HBITMAP hBitmap);
+      ULONG_PTR gdiplusToken_;
 };

@@ -39,6 +39,7 @@ QPixmap FrameImageProvider::requestPixmap(const QString &id, QSize *size, const 
 //========================================================================================================
 QImage FrameImageProvider::requestImage(const QString &id, QSize *size, const QSize &requestedSize)
 {
+    std::lock_guard lock(frameLock_);
     qDebug()<<"FrameImageProvider::requestImage";
     return frame_;
 }
@@ -54,7 +55,7 @@ FrameImageProvider* FrameImageProvider::GetInstance()
 //========================================================================================================
 void FrameImageProvider::SetImageData(std::pair<unsigned char *, unsigned int> data)
 {
-
+std::lock_guard lock(frameLock_);
     frame_.loadFromData(data.first,data.second,"JPG");
 }
 //========================================================================================================

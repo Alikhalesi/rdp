@@ -4,8 +4,10 @@ import QtQuick.Controls.Universal 2.3
 
 ApplicationWindow {
     visible: true
-    height:600
-    width:600
+
+   // flags: Qt.FramelessWindowHint | Qt.Window
+
+    visibility: Qt.WindowFullScreen
     header: ToolBar {
            Flow {
                anchors.fill: parent
@@ -21,8 +23,8 @@ ApplicationWindow {
                        btnStart.visible=false;
                        btnStop.visible=true;
                        lblError.text="";
-                     //  _clientController.start(txtIp.text)
-                        _commandController.start(txtIp.text)
+                       _clientController.start(txtIp.text)
+                      //  _commandController.start(txtIp.text)
                    }
                }
                ToolButton {
@@ -47,7 +49,12 @@ ApplicationWindow {
 
                    validator: RegularExpressionValidator { regularExpression: /\b(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\b/ }
                }
+               ToolButton
+               {
 
+                onClicked: Qt.exit(0)
+                text: "exit"
+               }
 
            }
 
@@ -61,6 +68,8 @@ ApplicationWindow {
         height:parent.height
         width:parent.width
     }
+
+
 
     footer: ToolBar {
         Flow{
@@ -88,10 +97,7 @@ ApplicationWindow {
 
         }
 
-//      PrimaryButton
-//        {
-//            text: "start"
-//        }
+
 
         }
 
@@ -105,15 +111,15 @@ ApplicationWindow {
             lblClient.text = "Connected"
              statusIndicator.color="green"
             txtIp.visible=false
-            _commandController.start()
+          //  _commandController.start(txtIp.text)
            }
 
            onImageChanged:function()
            {
-               var oldsrc=centerImg.source;
+              // var oldsrc=centerImg.source;
                centerImg.source="";
-               centerImg.source=oldsrc;
-               console.log("new image");
+               centerImg.source="image://_frameImageProvider";
+              // console.log("new image");
            }
            onDisconnected:function()
            {
@@ -151,7 +157,7 @@ ApplicationWindow {
               _clientController.stop()
            }
            onConnected: function() {
-              //  centerImg.source="image://_frameImageProvider"
+
                lblClient.text = "Connected"
                 statusIndicator.color="green"
                txtIp.visible=false
@@ -163,7 +169,7 @@ ApplicationWindow {
               {
                   lblClient.text = "Disconnected";
                   statusIndicator.color="red"
-                  centerImg.source="";
+
                   txtIp.visible=true
                   btnStart.visible=true
                   btnStop.visible=false

@@ -25,7 +25,11 @@ channel_->Start();
 //==========================================================================================
 void CommandController::stop()
 {
-channel_->Stop();
+    if(channel_!=nullptr)
+    {
+
+        channel_->Stop();
+    }
 }
 //==========================================================================================
 void CommandController::newCommand(QVariant val)

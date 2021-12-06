@@ -88,7 +88,7 @@ public:
         stopped_.test_and_set();
         while(stopped_.test_and_set())
         {
-             QCoreApplication::processEvents(QEventLoop::ExcludeUserInputEvents);
+             QCoreApplication::processEvents(QEventLoop::AllEvents);
 if(!stopped_.test_and_set())
 {
     return;

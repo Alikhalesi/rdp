@@ -24,5 +24,6 @@ protected:
 private :
 
     std::atomic_flag stopped_;
+    ImageUtil imageUtil_;
 
 };

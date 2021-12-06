@@ -1,10 +1,11 @@
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
 #include <QQmlContext>
-#include <rxqt.hpp>
 #include "Controller/clientController.hpp"
 #include "Controller/commandController.hpp"
 #include <components/FrameImageProvider.hpp>
+#include <components/FrameWriter.hpp>
+#include <QWindow>
 int main(int argc, char *argv[])
 {
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
@@ -14,13 +15,14 @@ int main(int argc, char *argv[])
     QGuiApplication app(argc, argv);
 
     QQmlApplicationEngine engine;
-rxqt::run_loop rxqt_run_loop;
+
     auto* clientController=new ClientController();
      auto* commandController=new CommandController();
      engine.rootContext()->setContextProperty( "_clientController", clientController );
   engine.rootContext()->setContextProperty( "_commandController", commandController );
 
     engine.addImageProvider("_frameImageProvider",FrameImageProvider::GetInstance() );
+ // qmlRegisterType<ImageWriter>("ImageWriter",1,0,"ImageWriter");
 
 
 

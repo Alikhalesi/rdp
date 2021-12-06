@@ -12,7 +12,8 @@ SOURCES += \
         Controller/clientController.cpp \
         Controller/commandController.cpp \
         main.cpp \
-        managers/localHookManager.cpp
+        managers/localHookManager.cpp \
+        managers/uiupdater.cpp
 
 RESOURCES += qml.qrc
 
@@ -30,7 +31,8 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 HEADERS += \
     Controller/clientController.hpp \
     Controller/commandController.hpp \
-    managers/localHookManager.hpp
+    managers/localHookManager.hpp \
+    managers/uiupdater.h
 
 
 

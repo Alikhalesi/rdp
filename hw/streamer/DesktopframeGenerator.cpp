@@ -143,7 +143,7 @@ void DesktopFrameGenerator::UpdateCurrentFrame()
        ReleaseDC(hWnd, hdcWindow);
 
 
-       ImageUtil::ConvertImage("image/jpeg",hbmScreen,lpbitmap,&len);
+       imageUtil_.ConvertHBitmapToJpegImage(hbmScreen,lpbitmap,&len);
        frameWriter.SetFrameLen(len);
        DeleteObject(hbmScreen);
 qDebug()<<"image size after convert: "<<len;

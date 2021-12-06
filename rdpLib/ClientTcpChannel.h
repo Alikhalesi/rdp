@@ -34,8 +34,9 @@ public:
 
 QByteArray Receive();
 
-void Disconnect();
+
  public slots:
+void Disconnect();
 void SocketError(QAbstractSocket::SocketError socketError);
 void Send(const char* data,int len);
 void SendAndDelete(std::shared_ptr<char[]> data,int len);

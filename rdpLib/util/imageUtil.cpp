@@ -1,5 +1,51 @@
 #include "imageUtil.hpp"
 using namespace Gdiplus;
+ImageUtil::ImageUtil()
+{
+    // Initialize GDI+.
+       GdiplusStartupInput gdiplusStartupInput;
+
+       GdiplusStartup(&gdiplusToken_, &gdiplusStartupInput, NULL);
+}
+//====================================================================================================================
+void ImageUtil::ConvertJPegToHbitmap(unsigned char *input,unsigned int len, HWND hwnd)
+{
+    CLSID   encoderClsid;
+    Status  stat;
+    CComPtr<IStream> srcstream;
+    auto hr= CreateStreamOnHGlobal(input,false,&srcstream);
+    Image*   image = Image::FromStream(srcstream);
+    qDebug()<<"stream img height: "<< image->GetHeight();
+
+
+    CComPtr<IStream> desstream=SHCreateMemStream(nullptr,0);
+
+
+    GetEncoderClsid(L"image/bmp", &encoderClsid);
+   // image->Save(L"d:\\bmp.bmp", &encoderClsid);
+    stat = image->Save(desstream, &encoderClsid, NULL);
+    assert(stat==S_OK);
+
+      auto* resultBmp=  Bitmap::FromStream(desstream);
+       Color color;
+      // resultBmp->Save(L"d:\\bxmp.bmp", &encoderClsid);
+       HBITMAP bitmap;
+       stat= resultBmp->GetHBITMAP(color,&bitmap);
+        assert(stat==S_OK);
+
+        //bitblitingTo window
+        DrawBitmap(hwnd,bitmap);
+delete resultBmp;
+
+
+    delete image;
+}
+//====================================================================================================================
+ImageUtil::~ImageUtil()
+{
+    GdiplusShutdown(gdiplusToken_);
+}
+//====================================================================================================================
 int ImageUtil::GetEncoderClsid(const WCHAR* format, CLSID* pClsid)
 {
    UINT  num = 0;          // number of image encoders
@@ -31,12 +77,9 @@ int ImageUtil::GetEncoderClsid(const WCHAR* format, CLSID* pClsid)
    return -1;  // Failure
 }
 //====================================================================================================================
- void ImageUtil::ConvertImage(const std::string &destFormat, HBITMAP input,unsigned char* output,unsigned int* len)
+ void ImageUtil::ConvertHBitmapToJpegImage( HBITMAP input,unsigned char* output,unsigned int* len)
 {
-    // Initialize GDI+.
-       GdiplusStartupInput gdiplusStartupInput;
-       ULONG_PTR gdiplusToken;
-       GdiplusStartup(&gdiplusToken, &gdiplusStartupInput, NULL);
+
 
        CLSID   encoderClsid;
        Status  stat;
@@ -71,6 +114,31 @@ assert(hr==S_OK);
 
        delete image;
 
-       GdiplusShutdown(gdiplusToken);
 
 }
+//===========================================================================================================
+ BOOL ImageUtil::DrawBitmap (HWND hwnd, HBITMAP hBitmap)
+ {
+     HDC       hDCBits;
+     BITMAP    Bitmap;
+     BOOL      bResult;
+
+     if (!hwnd || !hBitmap)
+         return FALSE;
+    auto hDC=GetDC(hwnd);
+    RECT s;
+    GetWindowRect(hwnd,&s);
+
+
+     hDCBits = CreateCompatibleDC(hDC);
+     GetObject(hBitmap, sizeof(BITMAP), (LPSTR)&Bitmap);
+     SelectObject(hDCBits, hBitmap);
+     bResult = BitBlt(hDC, 0,0, Bitmap.bmWidth, Bitmap.bmHeight, hDCBits, 0, 0, SRCCOPY);
+      InvalidateRect(hwnd,&s,TRUE);
+
+
+
+     DeleteDC(hDCBits);
+
+     return bResult;
+ }
