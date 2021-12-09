@@ -17,11 +17,13 @@ SOURCES += \
     clienttcpchannel.cpp \
     components/FrameImageProvider.cpp \
     components/FrameWriter.cpp \
+    managers/DXGIFrameGenerationManager.cpp \
     managers/DefaultCommandManager.cpp \
     managers/frameManager.cpp \
     managers/hookManager.cpp \
     rdplib.cpp \
     servertcpchannel.cpp \
+    util/IDeamon.cpp \
     util/imageUtil.cpp
 
 HEADERS += \
@@ -31,14 +33,17 @@ HEADERS += \
     clienttcpchannel.h \
     components/FrameImageProvider.hpp \
     components/FrameWriter.hpp \
+    managers/DXGIFrameGenerationManager.hpp \
     managers/DefaultCommandManager.hpp \
     managers/ICommandManager.hpp \
+    managers/IFrameGenerationManager.hpp \
     managers/frameManager.hpp \
     managers/hookManager.hpp \
     model/command.hpp \
     rdpLib_global.h \
     rdplib.h \
     servertcpchannel.h \
+    util/IDeamon.hpp \
     util/imageUtil.hpp \
     util/spinLock.hpp
 

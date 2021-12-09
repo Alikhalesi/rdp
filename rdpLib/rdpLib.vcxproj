@@ -19,13 +19,12 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{AB87C6AD-620D-37DD-9759-8BF069C8D350}</ProjectGuid>
-    <RootNamespace>hw</RootNamespace>
+    <ProjectGuid>{EE4D08FB-4482-3056-B5E2-D17EF53232E4}</ProjectGuid>
+    <RootNamespace>rdpLib</RootNamespace>
     <Keyword>QtVS_v304</Keyword>
     <WindowsTargetPlatformVersion>10.0.19041.0</WindowsTargetPlatformVersion>
     <WindowsTargetPlatformMinVersion>10.0.19041.0</WindowsTargetPlatformMinVersion>
     <QtMsBuild Condition="'$(QtMsBuild)'=='' or !Exists('$(QtMsBuild)\qt.targets')">$(MSBuildProjectDirectory)\QtMsBuild</QtMsBuild>
-    <ProjectName>rdpServer</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
@@ -33,36 +32,36 @@
     <OutputDirectory>release\</OutputDirectory>
     <ATLMinimizesCRunTimeLibraryUsage>false</ATLMinimizesCRunTimeLibraryUsage>
     <CharacterSet>NotSet</CharacterSet>
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
     <IntermediateDirectory>release\</IntermediateDirectory>
-    <PrimaryOutput>hw</PrimaryOutput>
+    <PrimaryOutput>rdpLib</PrimaryOutput>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <PlatformToolset>v142</PlatformToolset>
     <OutputDirectory>release\</OutputDirectory>
     <ATLMinimizesCRunTimeLibraryUsage>false</ATLMinimizesCRunTimeLibraryUsage>
     <CharacterSet>NotSet</CharacterSet>
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
     <IntermediateDirectory>release\</IntermediateDirectory>
-    <PrimaryOutput>hw</PrimaryOutput>
+    <PrimaryOutput>rdpLib</PrimaryOutput>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <PlatformToolset>v142</PlatformToolset>
     <OutputDirectory>debug\</OutputDirectory>
     <ATLMinimizesCRunTimeLibraryUsage>false</ATLMinimizesCRunTimeLibraryUsage>
     <CharacterSet>NotSet</CharacterSet>
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
     <IntermediateDirectory>debug\</IntermediateDirectory>
-    <PrimaryOutput>hw</PrimaryOutput>
+    <PrimaryOutput>rdpLib</PrimaryOutput>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <PlatformToolset>v142</PlatformToolset>
     <OutputDirectory>debug\</OutputDirectory>
     <ATLMinimizesCRunTimeLibraryUsage>false</ATLMinimizesCRunTimeLibraryUsage>
     <CharacterSet>NotSet</CharacterSet>
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
     <IntermediateDirectory>debug\</IntermediateDirectory>
-    <PrimaryOutput>hw</PrimaryOutput>
+    <PrimaryOutput>rdpLib</PrimaryOutput>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <Target Name="QtMsBuildNotFound" BeforeTargets="CustomBuild;ClCompile" Condition="!Exists('$(QtMsBuild)\qt.targets') or !Exists('$(QtMsBuild)\qt.props')">
@@ -88,49 +87,48 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <OutDir>debug\</OutDir>
     <IntDir>debug\</IntDir>
-    <TargetName>hw</TargetName>
+    <TargetName>rdpLib</TargetName>
     <IgnoreImportLibrary>true</IgnoreImportLibrary>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <TargetName>hw</TargetName>
+    <TargetName>rdpLib</TargetName>
     <IgnoreImportLibrary>true</IgnoreImportLibrary>
-    <OutDir>$(SolutionDir)$(Platform)\$(Configuration)\rdpServer</OutDir>
+    <OutDir>$(SolutionDir)$(Platform)\$(Configuration)\rdpLib</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <OutDir>release\</OutDir>
     <IntDir>release\</IntDir>
-    <TargetName>hw</TargetName>
+    <TargetName>rdpLib</TargetName>
     <IgnoreImportLibrary>true</IgnoreImportLibrary>
     <LinkIncremental>false</LinkIncremental>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <TargetName>hw</TargetName>
+    <TargetName>rdpLib</TargetName>
     <IgnoreImportLibrary>true</IgnoreImportLibrary>
     <LinkIncremental>false</LinkIncremental>
   </PropertyGroup>
   <PropertyGroup Label="QtSettings" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <QtInstall>6.2.1_msvc2019_64</QtInstall>
-    <QtModules>core;opengl;network;gui;qml;quick</QtModules>
+    <QtModules>core;opengl;network;gui;multimedia;qml;quick</QtModules>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="QtSettings">
     <QtInstall>6.2.1_msvc2019_64</QtInstall>
-    <QtModules>core;opengl;network;gui;qml;quick</QtModules>
-    <QtDeploy>true</QtDeploy>
+    <QtModules>core;opengl;network;gui;multimedia;qml;quick</QtModules>
   </PropertyGroup>
   <PropertyGroup Label="QtSettings" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <QtInstall>6.2.1_msvc2019_64</QtInstall>
-    <QtModules>core;opengl;network;gui;qml;quick</QtModules>
+    <QtModules>core;opengl;network;gui;multimedia;qml;quick</QtModules>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="QtSettings">
     <QtInstall>6.2.1_msvc2019_64</QtInstall>
-    <QtModules>core;opengl;network;gui;qml;quick</QtModules>
+    <QtModules>core;opengl;network;gui;multimedia;qml;quick</QtModules>
   </PropertyGroup>
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.props')">
     <Import Project="$(QtMsBuild)\qt.props" />
   </ImportGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
-      <AdditionalIncludeDirectories>GeneratedFiles\$(ConfigurationName);GeneratedFiles;.;C:\Program Files (x86)\Windows Kits\10\Lib\10.0.19041.0\um\x86;..\rdpLib;..\rxqt\include;..\rxqt\RxCpp\Rx\v2\src;release;/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>GeneratedFiles\$(ConfigurationName);GeneratedFiles;.;C:\Program Files (x86)\Windows Kits\10\Lib\10.0.19041.0\um\x86;release;/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalOptions>-Zc:rvalueCast -Zc:inline -Zc:strictStrings -Zc:throwingNew -permissive- -Zc:__cplusplus -Zc:externConstexpr -utf-8 -w34100 -w34189 -w44996 -w44456 -w44457 -w44458 %(AdditionalOptions)</AdditionalOptions>
       <AssemblerListingLocation>release\</AssemblerListingLocation>
       <BrowseInformation>false</BrowseInformation>
@@ -140,7 +138,7 @@
       <LanguageStandard>stdcpp17</LanguageStandard>
       <ObjectFileName>release\</ObjectFileName>
       <Optimization>MaxSpeed</Optimization>
-      <PreprocessorDefinitions>_WINDOWS;UNICODE;_UNICODE;WIN32;_ENABLE_EXTENDED_ALIGNED_STORAGE;NDEBUG;QT_NO_DEBUG;QT_QMLMODELS_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_WINDOWS;UNICODE;_UNICODE;WIN32;_ENABLE_EXTENDED_ALIGNED_STORAGE;RDPLIB_LIBRARY;NDEBUG;QT_NO_DEBUG;QT_QMLMODELS_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessToFile>false</PreprocessToFile>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <SuppressStartupBanner>true</SuppressStartupBanner>
@@ -149,16 +147,16 @@
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>gdi32.lib;user32.lib;D:\qtProjetcts\build-rdpLib-Desktop_Qt_6_2_1_MSVC2019_64bit-Release\release\rdpLib.lib;$(QTDIR)\lib\Qt6Quick.lib;$(QTDIR)\lib\Qt6OpenGL.lib;$(QTDIR)\lib\Qt6Gui.lib;$(QTDIR)\lib\Qt6QmlModels.lib;$(QTDIR)\lib\Qt6Qml.lib;$(QTDIR)\lib\Qt6Network.lib;$(QTDIR)\lib\Qt6Core.lib;$(QTDIR)\lib\Qt6EntryPoint.lib;shell32.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>D:\qtProjetcts\build-rdpLib-Desktop_Qt_6_2_1_MSVC2019_64bit-Release\release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalOptions>"/MANIFESTDEPENDENCY:type='win32' name='Microsoft.Windows.Common-Controls' version='6.0.0.0' publicKeyToken='6595b64144ccf1df' language='*' processorArchitecture='*'" %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalDependencies>user32.lib;gdi32.lib;gdiplus.lib;$(QTDIR)\lib\Qt6Quick.lib;$(QTDIR)\lib\Qt6QmlModels.lib;$(QTDIR)\lib\Qt6Qml.lib;$(QTDIR)\lib\Qt6Multimedia.lib;$(QTDIR)\lib\Qt6Network.lib;$(QTDIR)\lib\Qt6OpenGL.lib;$(QTDIR)\lib\Qt6Gui.lib;$(QTDIR)\lib\Qt6Core.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <DataExecutionPrevention>true</DataExecutionPrevention>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <IgnoreImportLibrary>true</IgnoreImportLibrary>
+      <LinkDLL>true</LinkDLL>
       <LinkIncremental>false</LinkIncremental>
       <OptimizeReferences>true</OptimizeReferences>
-      <OutputFile>$(OutDir)\hw.exe</OutputFile>
+      <OutputFile>$(OutDir)\rdpLib.dll</OutputFile>
       <RandomizedBaseAddress>true</RandomizedBaseAddress>
       <SubSystem>Windows</SubSystem>
       <SuppressStartupBanner>true</SuppressStartupBanner>
@@ -169,7 +167,7 @@
       <WarningLevel>0</WarningLevel>
     </Midl>
     <ResourceCompile>
-      <PreprocessorDefinitions>_WINDOWS;UNICODE;_UNICODE;WIN32;_ENABLE_EXTENDED_ALIGNED_STORAGE;NDEBUG;QT_NO_DEBUG;QT_QUICK_LIB;QT_OPENGL_LIB;QT_GUI_LIB;QT_QMLMODELS_LIB;QT_QML_LIB;QT_NETWORK_LIB;QT_CORE_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_WINDOWS;UNICODE;_UNICODE;WIN32;_ENABLE_EXTENDED_ALIGNED_STORAGE;RDPLIB_LIBRARY;NDEBUG;QT_NO_DEBUG;QT_QUICK_LIB;QT_QMLMODELS_LIB;QT_QML_LIB;QT_MULTIMEDIA_LIB;QT_NETWORK_LIB;QT_OPENGL_LIB;QT_GUI_LIB;QT_CORE_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ResourceCompile>
     <QtMoc>
       <CompilerFlavor>msvc</CompilerFlavor>
@@ -179,16 +177,10 @@
       <QtMocDir>$(Configuration)</QtMocDir>
       <QtMocFileName>moc_%(Filename).cpp</QtMocFileName>
     </QtMoc>
-    <QtRcc>
-      <Compression>default</Compression>
-      <ExecutionDescription>Rcc'ing %(Identity)...</ExecutionDescription>
-      <QtRccDir>$(Configuration)</QtRccDir>
-      <QtRccFileName>qrc_%(Filename).cpp</QtRccFileName>
-    </QtRcc>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>GeneratedFiles\$(ConfigurationName);GeneratedFiles;.;C:\Program Files (x86)\Windows Kits\10\Lib\10.0.19041.0\um\x86;..\rdpLib;..\rxqt\include;..\rxqt\RxCpp\Rx\v2\src;release;/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>GeneratedFiles\$(ConfigurationName);GeneratedFiles;.;C:\Program Files (x86)\Windows Kits\10\Lib\10.0.19041.0\um\x86;release;/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalOptions>-Zc:rvalueCast -Zc:inline -Zc:strictStrings -Zc:throwingNew -permissive- -Zc:__cplusplus -Zc:externConstexpr -utf-8 -w34100 -w34189 -w44996 -w44456 -w44457 -w44458 %(AdditionalOptions)</AdditionalOptions>
       <AssemblerListingLocation>release\</AssemblerListingLocation>
       <BrowseInformation>false</BrowseInformation>
@@ -198,7 +190,7 @@
       <LanguageStandard>stdcpp17</LanguageStandard>
       <ObjectFileName>release\</ObjectFileName>
       <Optimization>MaxSpeed</Optimization>
-      <PreprocessorDefinitions>_WINDOWS;UNICODE;_UNICODE;WIN32;_ENABLE_EXTENDED_ALIGNED_STORAGE;NDEBUG;QT_NO_DEBUG;QT_QMLMODELS_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_WINDOWS;UNICODE;_UNICODE;WIN32;_ENABLE_EXTENDED_ALIGNED_STORAGE;RDPLIB_LIBRARY;NDEBUG;QT_NO_DEBUG;QT_QMLMODELS_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessToFile>false</PreprocessToFile>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <SuppressStartupBanner>true</SuppressStartupBanner>
@@ -207,16 +199,16 @@
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>gdi32.lib;user32.lib;D:\qtProjetcts\build-rdpLib-Desktop_Qt_6_2_1_MSVC2019_64bit-Release\release\rdpLib.lib;$(QTDIR)\lib\Qt6Quick.lib;$(QTDIR)\lib\Qt6OpenGL.lib;$(QTDIR)\lib\Qt6Gui.lib;$(QTDIR)\lib\Qt6QmlModels.lib;$(QTDIR)\lib\Qt6Qml.lib;$(QTDIR)\lib\Qt6Network.lib;$(QTDIR)\lib\Qt6Core.lib;$(QTDIR)\lib\Qt6EntryPoint.lib;shell32.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>D:\qtProjetcts\build-rdpLib-Desktop_Qt_6_2_1_MSVC2019_64bit-Release\release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalOptions>"/MANIFESTDEPENDENCY:type='win32' name='Microsoft.Windows.Common-Controls' version='6.0.0.0' publicKeyToken='6595b64144ccf1df' language='*' processorArchitecture='*'" %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalDependencies>user32.lib;gdi32.lib;gdiplus.lib;$(QTDIR)\lib\Qt6Quick.lib;$(QTDIR)\lib\Qt6QmlModels.lib;$(QTDIR)\lib\Qt6Qml.lib;$(QTDIR)\lib\Qt6Multimedia.lib;$(QTDIR)\lib\Qt6Network.lib;$(QTDIR)\lib\Qt6OpenGL.lib;$(QTDIR)\lib\Qt6Gui.lib;$(QTDIR)\lib\Qt6Core.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <DataExecutionPrevention>true</DataExecutionPrevention>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <IgnoreImportLibrary>true</IgnoreImportLibrary>
+      <LinkDLL>true</LinkDLL>
       <LinkIncremental>false</LinkIncremental>
       <OptimizeReferences>true</OptimizeReferences>
-      <OutputFile>$(OutDir)\hw.exe</OutputFile>
+      <OutputFile>$(OutDir)\rdpLib.dll</OutputFile>
       <RandomizedBaseAddress>true</RandomizedBaseAddress>
       <SubSystem>Windows</SubSystem>
       <SuppressStartupBanner>true</SuppressStartupBanner>
@@ -227,7 +219,7 @@
       <WarningLevel>0</WarningLevel>
     </Midl>
     <ResourceCompile>
-      <PreprocessorDefinitions>_WINDOWS;UNICODE;_UNICODE;WIN32;_ENABLE_EXTENDED_ALIGNED_STORAGE;NDEBUG;QT_NO_DEBUG;QT_QUICK_LIB;QT_OPENGL_LIB;QT_GUI_LIB;QT_QMLMODELS_LIB;QT_QML_LIB;QT_NETWORK_LIB;QT_CORE_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_WINDOWS;UNICODE;_UNICODE;WIN32;_ENABLE_EXTENDED_ALIGNED_STORAGE;RDPLIB_LIBRARY;NDEBUG;QT_NO_DEBUG;QT_QUICK_LIB;QT_QMLMODELS_LIB;QT_QML_LIB;QT_MULTIMEDIA_LIB;QT_NETWORK_LIB;QT_OPENGL_LIB;QT_GUI_LIB;QT_CORE_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ResourceCompile>
     <QtMoc>
       <CompilerFlavor>msvc</CompilerFlavor>
@@ -237,16 +229,10 @@
       <QtMocDir>$(Configuration)</QtMocDir>
       <QtMocFileName>moc_%(Filename).cpp</QtMocFileName>
     </QtMoc>
-    <QtRcc>
-      <Compression>default</Compression>
-      <ExecutionDescription>Rcc'ing %(Identity)...</ExecutionDescription>
-      <QtRccDir>$(Configuration)</QtRccDir>
-      <QtRccFileName>qrc_%(Filename).cpp</QtRccFileName>
-    </QtRcc>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
-      <AdditionalIncludeDirectories>GeneratedFiles\$(ConfigurationName);GeneratedFiles;.;C:\Program Files (x86)\Windows Kits\10\Lib\10.0.19041.0\um\x86;..\rdpLib;..\rxqt\include;..\rxqt\RxCpp\Rx\v2\src;debug;/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>GeneratedFiles\$(ConfigurationName);GeneratedFiles;.;C:\Program Files (x86)\Windows Kits\10\Lib\10.0.19041.0\um\x86;debug;/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalOptions>-Zc:rvalueCast -Zc:inline -Zc:strictStrings -Zc:throwingNew -permissive- -Zc:__cplusplus -Zc:externConstexpr -utf-8 -w34100 -w34189 -w44996 -w44456 -w44457 -w44458 %(AdditionalOptions)</AdditionalOptions>
       <AssemblerListingLocation>debug\</AssemblerListingLocation>
       <BrowseInformation>false</BrowseInformation>
@@ -256,7 +242,7 @@
       <LanguageStandard>stdcpp17</LanguageStandard>
       <ObjectFileName>debug\</ObjectFileName>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>_WINDOWS;UNICODE;_UNICODE;WIN32;_ENABLE_EXTENDED_ALIGNED_STORAGE;QT_QMLMODELS_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_WINDOWS;UNICODE;_UNICODE;WIN32;_ENABLE_EXTENDED_ALIGNED_STORAGE;RDPLIB_LIBRARY;QT_QMLMODELS_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessToFile>false</PreprocessToFile>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <SuppressStartupBanner>true</SuppressStartupBanner>
@@ -265,13 +251,13 @@
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>gdi32.lib;user32.lib;D:\qtProjetcts\build-rdpLib-Desktop_Qt_6_2_1_MSVC2019_64bit-Release\release\rdpLib.lib;$(QTDIR)\lib\Qt6Quickd.lib;$(QTDIR)\lib\Qt6OpenGLd.lib;$(QTDIR)\lib\Qt6Guid.lib;$(QTDIR)\lib\Qt6QmlModelsd.lib;$(QTDIR)\lib\Qt6Qmld.lib;$(QTDIR)\lib\Qt6Networkd.lib;$(QTDIR)\lib\Qt6Cored.lib;$(QTDIR)\lib\Qt6EntryPointd.lib;shell32.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>D:\qtProjetcts\build-rdpLib-Desktop_Qt_6_2_1_MSVC2019_64bit-Release\release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalOptions>"/MANIFESTDEPENDENCY:type='win32' name='Microsoft.Windows.Common-Controls' version='6.0.0.0' publicKeyToken='6595b64144ccf1df' language='*' processorArchitecture='*'" %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalDependencies>user32.lib;gdi32.lib;gdiplus.lib;$(QTDIR)\lib\Qt6Quickd.lib;$(QTDIR)\lib\Qt6QmlModelsd.lib;$(QTDIR)\lib\Qt6Qmld.lib;$(QTDIR)\lib\Qt6Multimediad.lib;$(QTDIR)\lib\Qt6Networkd.lib;$(QTDIR)\lib\Qt6OpenGLd.lib;$(QTDIR)\lib\Qt6Guid.lib;$(QTDIR)\lib\Qt6Cored.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <DataExecutionPrevention>true</DataExecutionPrevention>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <IgnoreImportLibrary>true</IgnoreImportLibrary>
-      <OutputFile>$(OutDir)\hw.exe</OutputFile>
+      <LinkDLL>true</LinkDLL>
+      <OutputFile>$(OutDir)\rdpLib.dll</OutputFile>
       <RandomizedBaseAddress>true</RandomizedBaseAddress>
       <SubSystem>Windows</SubSystem>
       <SuppressStartupBanner>true</SuppressStartupBanner>
@@ -282,14 +268,8 @@
       <WarningLevel>0</WarningLevel>
     </Midl>
     <ResourceCompile>
-      <PreprocessorDefinitions>_WINDOWS;UNICODE;_UNICODE;WIN32;_ENABLE_EXTENDED_ALIGNED_STORAGE;QT_QUICK_LIB;QT_OPENGL_LIB;QT_GUI_LIB;QT_QMLMODELS_LIB;QT_QML_LIB;QT_NETWORK_LIB;QT_CORE_LIB;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_WINDOWS;UNICODE;_UNICODE;WIN32;_ENABLE_EXTENDED_ALIGNED_STORAGE;RDPLIB_LIBRARY;QT_QUICK_LIB;QT_QMLMODELS_LIB;QT_QML_LIB;QT_MULTIMEDIA_LIB;QT_NETWORK_LIB;QT_OPENGL_LIB;QT_GUI_LIB;QT_CORE_LIB;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ResourceCompile>
-    <QtRcc>
-      <Compression>default</Compression>
-      <ExecutionDescription>Rcc'ing %(Identity)...</ExecutionDescription>
-      <QtRccDir>$(Configuration)</QtRccDir>
-      <QtRccFileName>qrc_%(Filename).cpp</QtRccFileName>
-    </QtRcc>
     <QtMoc>
       <CompilerFlavor>msvc</CompilerFlavor>
       <Include>./$(Configuration)/moc_predefs.h</Include>
@@ -301,7 +281,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>GeneratedFiles\$(ConfigurationName);GeneratedFiles;.;C:\Program Files (x86)\Windows Kits\10\Lib\10.0.19041.0\um\x86;..\rdpLib;..\rxqt\include;..\rxqt\RxCpp\Rx\v2\src;debug;/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>GeneratedFiles\$(ConfigurationName);GeneratedFiles;.;C:\Program Files (x86)\Windows Kits\10\Lib\10.0.19041.0\um\x86;debug;/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalOptions>-Zc:rvalueCast -Zc:inline -Zc:strictStrings -Zc:throwingNew -permissive- -Zc:__cplusplus -Zc:externConstexpr -utf-8 -w34100 -w34189 -w44996 -w44456 -w44457 -w44458 %(AdditionalOptions)</AdditionalOptions>
       <AssemblerListingLocation>debug\</AssemblerListingLocation>
       <BrowseInformation>false</BrowseInformation>
@@ -311,7 +291,7 @@
       <LanguageStandard>stdcpp17</LanguageStandard>
       <ObjectFileName>debug\</ObjectFileName>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>_WINDOWS;UNICODE;_UNICODE;WIN32;_ENABLE_EXTENDED_ALIGNED_STORAGE;QT_QMLMODELS_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_WINDOWS;UNICODE;_UNICODE;WIN32;_ENABLE_EXTENDED_ALIGNED_STORAGE;RDPLIB_LIBRARY;QT_QMLMODELS_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessToFile>false</PreprocessToFile>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <SuppressStartupBanner>true</SuppressStartupBanner>
@@ -320,13 +300,13 @@
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>gdi32.lib;user32.lib;$(SolutionDir)$(Platform)\$(Configuration)\rdpLib\rdpLib.lib;$(QTDIR)\lib\Qt6Quickd.lib;$(QTDIR)\lib\Qt6OpenGLd.lib;$(QTDIR)\lib\Qt6Guid.lib;$(QTDIR)\lib\Qt6QmlModelsd.lib;$(QTDIR)\lib\Qt6Qmld.lib;$(QTDIR)\lib\Qt6Networkd.lib;$(QTDIR)\lib\Qt6Cored.lib;$(QTDIR)\lib\Qt6EntryPointd.lib;shell32.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>D:\qtProjetcts\build-rdpLib-Desktop_Qt_6_2_1_MSVC2019_64bit-Release\release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalOptions>"/MANIFESTDEPENDENCY:type='win32' name='Microsoft.Windows.Common-Controls' version='6.0.0.0' publicKeyToken='6595b64144ccf1df' language='*' processorArchitecture='*'" %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalDependencies>user32.lib;gdi32.lib;gdiplus.lib;$(QTDIR)\lib\Qt6Quickd.lib;$(QTDIR)\lib\Qt6QmlModelsd.lib;$(QTDIR)\lib\Qt6Qmld.lib;$(QTDIR)\lib\Qt6Multimediad.lib;$(QTDIR)\lib\Qt6Networkd.lib;$(QTDIR)\lib\Qt6OpenGLd.lib;$(QTDIR)\lib\Qt6Guid.lib;$(QTDIR)\lib\Qt6Cored.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <DataExecutionPrevention>true</DataExecutionPrevention>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <IgnoreImportLibrary>true</IgnoreImportLibrary>
-      <OutputFile>$(OutDir)\hw.exe</OutputFile>
+      <LinkDLL>true</LinkDLL>
+      <OutputFile>$(OutDir)\rdpLib.dll</OutputFile>
       <RandomizedBaseAddress>true</RandomizedBaseAddress>
       <SubSystem>Windows</SubSystem>
       <SuppressStartupBanner>true</SuppressStartupBanner>
@@ -337,14 +317,8 @@
       <WarningLevel>0</WarningLevel>
     </Midl>
     <ResourceCompile>
-      <PreprocessorDefinitions>_WINDOWS;UNICODE;_UNICODE;WIN32;_ENABLE_EXTENDED_ALIGNED_STORAGE;QT_QUICK_LIB;QT_OPENGL_LIB;QT_GUI_LIB;QT_QMLMODELS_LIB;QT_QML_LIB;QT_NETWORK_LIB;QT_CORE_LIB;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_WINDOWS;UNICODE;_UNICODE;WIN32;_ENABLE_EXTENDED_ALIGNED_STORAGE;RDPLIB_LIBRARY;QT_QUICK_LIB;QT_QMLMODELS_LIB;QT_QML_LIB;QT_MULTIMEDIA_LIB;QT_NETWORK_LIB;QT_OPENGL_LIB;QT_GUI_LIB;QT_CORE_LIB;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ResourceCompile>
-    <QtRcc>
-      <Compression>default</Compression>
-      <ExecutionDescription>Rcc'ing %(Identity)...</ExecutionDescription>
-      <QtRccDir>$(Configuration)</QtRccDir>
-      <QtRccFileName>qrc_%(Filename).cpp</QtRccFileName>
-    </QtRcc>
     <QtMoc>
       <CompilerFlavor>msvc</CompilerFlavor>
       <Include>./$(Configuration)/moc_predefs.h</Include>
@@ -355,25 +329,53 @@
     </QtMoc>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="streamer\DesktopFrameGenerator.cpp" />
+    <ClCompile Include="managers\DefaultCommandManager.cpp" />
     <ClCompile Include="components\FrameImageProvider.cpp" />
-    <ClCompile Include="controller\commandController.cpp" />
-    <ClCompile Include="main.cpp" />
-    <ClCompile Include="channel\p2pChannel.cpp" />
-    <ClCompile Include="controller\serverController.cpp" />
+    <ClCompile Include="components\FrameWriter.cpp" />
+    <ClCompile Include="managers\IDGXIFrameGenerator.cpp" />
+    <ClCompile Include="util\IDeamon.cpp" />
+    <ClCompile Include="channel\LenValInterceptor.cpp" />
+    <ClCompile Include="clienttcpchannel.cpp" />
+    <ClCompile Include="managers\frameManager.cpp" />
+    <ClCompile Include="managers\hookManager.cpp" />
+    <ClCompile Include="util\IDGXI\DisplayManager.cpp" />
+    <ClCompile Include="util\IDGXI\DuplicationManager.cpp" />
+    <ClCompile Include="util\IDGXI\OutputManager.cpp" />
+    <ClCompile Include="util\imageUtil.cpp" />
+    <ClCompile Include="channel\inputCommandInterceptor.cpp" />
+    <ClCompile Include="rdplib.cpp" />
+    <ClCompile Include="servertcpchannel.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <QtMoc Include="streamer\DesktopFrameGenerator.hpp">
-    </QtMoc>
+    <ClInclude Include="managers\DefaultCommandManager.hpp" />
     <ClInclude Include="components\FrameImageProvider.hpp" />
-    <QtMoc Include="streamer\Streamer.hpp">
+    <QtMoc Include="components\FrameWriter.hpp">
     </QtMoc>
-    <QtMoc Include="controller\commandController.hpp">
+    <QtMoc Include="channel\IChannelInterceptor.hpp">
     </QtMoc>
-    <QtMoc Include="channel\p2pChannel.hpp">
+    <ClInclude Include="managers\ICommandManager.hpp" />
+    <QtMoc Include="util\IDeamon.hpp">
     </QtMoc>
-    <QtMoc Include="controller\serverController.hpp">
+    <ClInclude Include="managers\IDGXIFrameGenerator.hpp" />
+    <ClInclude Include="managers\IFrameGenerationManager.hpp" />
+    <ClInclude Include="channel\LenValInterceptor.hpp" />
+    <QtMoc Include="clienttcpchannel.h">
     </QtMoc>
+    <ClInclude Include="model\command.hpp" />
+    <ClInclude Include="managers\frameManager.hpp" />
+    <QtMoc Include="managers\hookManager.hpp">
+    </QtMoc>
+    <ClInclude Include="util\IDGXI\CommonTypes.h" />
+    <ClInclude Include="util\IDGXI\DisplayManager.h" />
+    <ClInclude Include="util\IDGXI\DuplicationManager.h" />
+    <ClInclude Include="util\IDGXI\OutputManager.h" />
+    <ClInclude Include="util\imageUtil.hpp" />
+    <ClInclude Include="channel\inputCommandInterceptor.hpp" />
+    <ClInclude Include="rdpLib_global.h" />
+    <ClInclude Include="rdplib.h" />
+    <QtMoc Include="servertcpchannel.h">
+    </QtMoc>
+    <ClInclude Include="util\spinLock.hpp" />
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="debug\moc_predefs.h.cbt">
@@ -404,49 +406,8 @@
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
-    <CustomBuild Include="hw_fa_IR.ts">
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">hw_fa_IR.ts;%(AdditionalInputs)</AdditionalInputs>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">hw_fa_IR.ts;%(AdditionalInputs)</AdditionalInputs>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(QTDIR)\bin\lrelease.exe hw_fa_IR.ts -qm release\hw_fa_IR.qm</Command>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(QTDIR)\bin\lrelease.exe hw_fa_IR.ts -qm release\hw_fa_IR.qm</Command>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">lrelease</Message>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">lrelease</Message>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">release\hw_fa_IR.qm;%(Outputs)</Outputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">release\hw_fa_IR.qm;%(Outputs)</Outputs>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">hw_fa_IR.ts;%(AdditionalInputs)</AdditionalInputs>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">hw_fa_IR.ts;%(AdditionalInputs)</AdditionalInputs>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(QTDIR)\bin\lrelease.exe hw_fa_IR.ts -qm debug\hw_fa_IR.qm</Command>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(QTDIR)\bin\lrelease.exe hw_fa_IR.ts -qm debug\hw_fa_IR.qm</Command>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">lrelease</Message>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">lrelease</Message>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">debug\hw_fa_IR.qm;%(Outputs)</Outputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">debug\hw_fa_IR.qm;%(Outputs)</Outputs>
-    </CustomBuild>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="debug\hw_fa_IR.qm">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-    </None>
-    <None Include="release\hw_fa_IR.qm">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-    </None>
-    <None Include="main.qml" />
-    <QtRcc Include="debug\qmake_qmake_qm_files.qrc">
-      <InitFuncName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">qmake_qmake_qm_files</InitFuncName>
-      <InitFuncName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">qmake_qmake_qm_files</InitFuncName>
-    </QtRcc>
-    <QtRcc Include="release\qmake_qmake_qm_files.qrc">
-      <InitFuncName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">qmake_qmake_qm_files</InitFuncName>
-      <InitFuncName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">qmake_qmake_qm_files</InitFuncName>
-    </QtRcc>
-    <QtRcc Include="qml.qrc">
-      <InitFuncName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">qml</InitFuncName>
-      <InitFuncName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">qml</InitFuncName>
-      <InitFuncName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">qml</InitFuncName>
-      <InitFuncName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">qml</InitFuncName>
-    </QtRcc>
+    <FxCompile Include="util\IDGXI\PixelShader.hlsl" />
+    <FxCompile Include="util\IDGXI\VertexShader.hlsl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">

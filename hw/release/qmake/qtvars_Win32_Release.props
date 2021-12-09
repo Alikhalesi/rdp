@@ -29,7 +29,7 @@
 <QMake_QMAKE_VERSION_>3.1</QMake_QMAKE_VERSION_>
 <QMake_QT_VERSION_>6.2.1</QMake_QT_VERSION_>
 <Qt_INCLUDEPATH_
-      >$(Qt_INCLUDEPATH_);</Qt_INCLUDEPATH_>
+      >$(Qt_INCLUDEPATH_);Release</Qt_INCLUDEPATH_>
     <QtBkup_QtInstall
       >6.2.1_msvc2019_64</QtBkup_QtInstall>
     <QtBkup_QtModules
