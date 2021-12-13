@@ -28,7 +28,7 @@ class OUTPUTMANAGER
         HANDLE GetSharedHandle();
         void WindowResize();
 
-    private:
+    protected:
     // Methods
         DUPL_RETURN ProcessMonoMask(bool IsMono, _Inout_ PTR_INFO* PtrInfo, _Out_ INT* PtrWidth, _Out_ INT* PtrHeight, _Out_ INT* PtrLeft, _Out_ INT* PtrTop, _Outptr_result_bytebuffer_(*PtrHeight * *PtrWidth * BPP) BYTE** InitBuffer, _Out_ D3D11_BOX* Box);
         DUPL_RETURN MakeRTV();

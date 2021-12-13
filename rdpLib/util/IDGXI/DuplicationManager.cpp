@@ -7,6 +7,127 @@
 
 #include "DuplicationManager.h"
 
+#include <corecrt_wstdio.h>
+
+// These are the errors we expect from general Dxgi API due to a transition
+HRESULT SystemTransitionsExpectedErrors[] = {
+                                                DXGI_ERROR_DEVICE_REMOVED,
+                                                DXGI_ERROR_ACCESS_LOST,
+                                                static_cast<HRESULT>(WAIT_ABANDONED),
+                                                S_OK                                    // Terminate list with zero valued HRESULT
+};
+
+// These are the errors we expect from IDXGIOutput1::DuplicateOutput due to a transition
+HRESULT CreateDuplicationExpectedErrors[] = {
+                                                DXGI_ERROR_DEVICE_REMOVED,
+                                                static_cast<HRESULT>(E_ACCESSDENIED),
+                                                DXGI_ERROR_UNSUPPORTED,
+                                                DXGI_ERROR_SESSION_DISCONNECTED,
+                                                S_OK                                    // Terminate list with zero valued HRESULT
+};
+
+// These are the errors we expect from IDXGIOutputDuplication methods due to a transition
+HRESULT FrameInfoExpectedErrors[] = {
+                                        DXGI_ERROR_DEVICE_REMOVED,
+                                        DXGI_ERROR_ACCESS_LOST,
+                                        S_OK                                    // Terminate list with zero valued HRESULT
+};
+
+// These are the errors we expect from IDXGIAdapter::EnumOutputs methods due to outputs becoming stale during a transition
+HRESULT EnumOutputsExpectedErrors[] = {
+                                          DXGI_ERROR_NOT_FOUND,
+                                          S_OK                                    // Terminate list with zero valued HRESULT
+};
+
+
+_Post_satisfies_(return != DUPL_RETURN_SUCCESS)
+
+DUPL_RETURN ProcessFailure(_In_opt_ ID3D11Device * Device, _In_ LPCWSTR Str, _In_ LPCWSTR Title, HRESULT hr, _In_opt_z_ HRESULT * ExpectedErrors)
+{
+    HRESULT TranslatedHr;
+
+    // On an error check if the DX device is lost
+    if (Device)
+    {
+        HRESULT DeviceRemovedReason = Device->GetDeviceRemovedReason();
+
+        switch (DeviceRemovedReason)
+        {
+        case DXGI_ERROR_DEVICE_REMOVED:
+        case DXGI_ERROR_DEVICE_RESET:
+            case static_cast<HRESULT>(E_OUTOFMEMORY) :
+            {
+                // Our device has been stopped due to an external event on the GPU so map them all to
+                // device removed and continue processing the condition
+                TranslatedHr = DXGI_ERROR_DEVICE_REMOVED;
+                break;
+            }
+
+            case S_OK:
+            {
+                // Device is not removed so use original error
+                TranslatedHr = hr;
+                break;
+            }
+
+            default:
+            {
+                // Device is removed but not a error we want to remap
+                TranslatedHr = DeviceRemovedReason;
+            }
+        }
+    }
+    else
+    {
+        TranslatedHr = hr;
+    }
+
+    // Check if this error was expected or not
+    if (ExpectedErrors)
+    {
+        HRESULT* CurrentResult = ExpectedErrors;
+
+        while (*CurrentResult != S_OK)
+        {
+            if (*(CurrentResult++) == TranslatedHr)
+            {
+                return DUPL_RETURN_ERROR_EXPECTED;
+            }
+        }
+    }
+
+    // Error was not expected so display the message box
+    DisplayMsg(Str, Title, TranslatedHr);
+
+    return DUPL_RETURN_ERROR_UNEXPECTED;
+}
+
+//
+// Displays a message
+//
+void DisplayMsg(_In_ LPCWSTR Str, _In_ LPCWSTR Title, HRESULT hr)
+{
+    if (SUCCEEDED(hr))
+    {
+        MessageBoxW(nullptr, Str, Title, MB_OK);
+        return;
+    }
+
+    const UINT StringLen = (UINT)(wcslen(Str) + sizeof(" with HRESULT 0x########."));
+    wchar_t* OutStr = new wchar_t[StringLen];
+    if (!OutStr)
+    {
+        return;
+    }
+
+    INT LenWritten = swprintf_s(OutStr, StringLen, L"%s with 0x%X.", Str, hr);
+    if (LenWritten != -1)
+    {
+        MessageBoxW(nullptr, OutStr, Title, MB_OK);
+    }
+
+    delete[] OutStr;
+}
 //
 // Constructor sets up references / variables
 //
@@ -290,6 +411,91 @@ DUPL_RETURN DUPLICATIONMANAGER::GetFrame(_Out_ FRAME_DATA* Data, _Out_ bool* Tim
     return DUPL_RETURN_SUCCESS;
 }
 
+DUPL_RETURN DUPLICATIONMANAGER::WaitToGetFrame(_Out_ FRAME_DATA * Data)
+{
+    IDXGIResource* DesktopResource = nullptr;
+    DXGI_OUTDUPL_FRAME_INFO FrameInfo;
+
+    // Get new frame
+    HRESULT hr = m_DeskDupl->AcquireNextFrame(INFINITE, &FrameInfo, &DesktopResource);
+  
+
+    if (FAILED(hr))
+    {
+        return ProcessFailure(m_Device, L"Failed to acquire next frame in DUPLICATIONMANAGER", L"Error", hr, FrameInfoExpectedErrors);
+    }
+
+    // If still holding old frame, destroy it
+    if (m_AcquiredDesktopImage)
+    {
+        m_AcquiredDesktopImage->Release();
+        m_AcquiredDesktopImage = nullptr;
+    }
+
+    // QI for IDXGIResource
+    hr = DesktopResource->QueryInterface(__uuidof(ID3D11Texture2D), reinterpret_cast<void**>(&m_AcquiredDesktopImage));
+    DesktopResource->Release();
+    DesktopResource = nullptr;
+    if (FAILED(hr))
+    {
+        return ProcessFailure(nullptr, L"Failed to QI for ID3D11Texture2D from acquired IDXGIResource in DUPLICATIONMANAGER", L"Error", hr);
+    }
+
+    // Get metadata
+    if (FrameInfo.TotalMetadataBufferSize)
+    {
+        // Old buffer too small
+        if (FrameInfo.TotalMetadataBufferSize > m_MetaDataSize)
+        {
+            if (m_MetaDataBuffer)
+            {
+                delete[] m_MetaDataBuffer;
+                m_MetaDataBuffer = nullptr;
+            }
+            m_MetaDataBuffer = new (std::nothrow) BYTE[FrameInfo.TotalMetadataBufferSize];
+            if (!m_MetaDataBuffer)
+            {
+                m_MetaDataSize = 0;
+                Data->MoveCount = 0;
+                Data->DirtyCount = 0;
+                return ProcessFailure(nullptr, L"Failed to allocate memory for metadata in DUPLICATIONMANAGER", L"Error", E_OUTOFMEMORY);
+            }
+            m_MetaDataSize = FrameInfo.TotalMetadataBufferSize;
+        }
+
+        UINT BufSize = FrameInfo.TotalMetadataBufferSize;
+
+        // Get move rectangles
+        hr = m_DeskDupl->GetFrameMoveRects(BufSize, reinterpret_cast<DXGI_OUTDUPL_MOVE_RECT*>(m_MetaDataBuffer), &BufSize);
+        if (FAILED(hr))
+        {
+            Data->MoveCount = 0;
+            Data->DirtyCount = 0;
+            return ProcessFailure(nullptr, L"Failed to get frame move rects in DUPLICATIONMANAGER", L"Error", hr, FrameInfoExpectedErrors);
+        }
+        Data->MoveCount = BufSize / sizeof(DXGI_OUTDUPL_MOVE_RECT);
+
+        BYTE* DirtyRects = m_MetaDataBuffer + BufSize;
+        BufSize = FrameInfo.TotalMetadataBufferSize - BufSize;
+
+        // Get dirty rectangles
+        hr = m_DeskDupl->GetFrameDirtyRects(BufSize, reinterpret_cast<RECT*>(DirtyRects), &BufSize);
+        if (FAILED(hr))
+        {
+            Data->MoveCount = 0;
+            Data->DirtyCount = 0;
+            return ProcessFailure(nullptr, L"Failed to get frame dirty rects in DUPLICATIONMANAGER", L"Error", hr, FrameInfoExpectedErrors);
+        }
+        Data->DirtyCount = BufSize / sizeof(RECT);
+
+        Data->MetaData = m_MetaDataBuffer;
+    }
+
+    Data->Frame = m_AcquiredDesktopImage;
+    Data->FrameInfo = FrameInfo;
+
+    return DUPL_RETURN_SUCCESS;
+}
 //
 // Release frame
 //

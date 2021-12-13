@@ -30,6 +30,6 @@ void ServerController::stop()
 //======================================================================================================
 void ServerController::newFrame(unsigned char *data, unsigned int len)
 {
-    FrameImageProvider::GetInstance()->SetImageData(std::make_pair(data,len));
-    emit imageChanged();
+  //  FrameImageProvider::GetInstance()->SetImageData(std::make_pair(data,len));
+   // emit imageChanged();
 }

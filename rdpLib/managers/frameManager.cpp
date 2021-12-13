@@ -39,8 +39,8 @@ unsigned int FrameManager::GetFrameLen()
 //=====================================================================================================
 void FrameManager::Init()
 {
-        currentFrame_=(unsigned char*) malloc(allocationLen_);
-        currentFrameCopy_=(unsigned char*) malloc(allocationLen_);
+        currentFrame_=(unsigned char*) calloc(allocationLen_,1);
+        currentFrameCopy_=(unsigned char*)calloc(allocationLen_,1);
 }
 //=====================================================================================================
 FrameManager::~FrameManager()

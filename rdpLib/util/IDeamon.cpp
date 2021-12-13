@@ -1,6 +1,6 @@
 #include "IDeamon.hpp"
 //=============================================================
-void IDeamon::Start()
+void IDeamon::Start(QString)
 {
     stopped_.test_and_set();
     while(true)

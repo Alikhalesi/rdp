@@ -4,7 +4,9 @@
 #include <QCoreApplication>
 #include <QEventLoop>
 #include "util/IDeamon.hpp"
-class IFrameGenerationManager :public IDeamon
+#include "rdpLib_global.h"
+class RDPLIB_EXPORT IFrameGenerationManager :public IDeamon
 {
-
+protected:
+	virtual void Run() = 0;
 };

@@ -4,6 +4,8 @@
 #include <streamer/DesktopFrameGenerator.hpp>
 #include <channel/p2pChannel.hpp>
 #include <components/FrameImageProvider.hpp>
+
+#include "managers/IDGXIFrameGenerator.hpp"
 #pragma once
 class ServerController: public QObject
 {
@@ -23,5 +25,7 @@ public:
 
 
 private:
-     Streamer<DesktopFrameGenerator,P2PChannel> streamer{};
+     //Streamer<DesktopFrameGenerator,P2PChannel> streamer{};
+    Streamer<IDGXIFrameGenerator, P2PChannel> streamer{};
+    
 };

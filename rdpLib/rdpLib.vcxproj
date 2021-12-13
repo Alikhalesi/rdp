@@ -296,11 +296,11 @@
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
-      <WarningLevel>Level3</WarningLevel>
+      <WarningLevel>Level1</WarningLevel>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>user32.lib;gdi32.lib;gdiplus.lib;$(QTDIR)\lib\Qt6Quickd.lib;$(QTDIR)\lib\Qt6QmlModelsd.lib;$(QTDIR)\lib\Qt6Qmld.lib;$(QTDIR)\lib\Qt6Multimediad.lib;$(QTDIR)\lib\Qt6Networkd.lib;$(QTDIR)\lib\Qt6OpenGLd.lib;$(QTDIR)\lib\Qt6Guid.lib;$(QTDIR)\lib\Qt6Cored.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>user32.lib;gdi32.lib;gdiplus.lib;$(QTDIR)\lib\Qt6Quickd.lib;$(QTDIR)\lib\Qt6QmlModelsd.lib;$(QTDIR)\lib\Qt6Qmld.lib;$(QTDIR)\lib\Qt6Multimediad.lib;$(QTDIR)\lib\Qt6Networkd.lib;$(QTDIR)\lib\Qt6OpenGLd.lib;$(QTDIR)\lib\Qt6Guid.lib;$(QTDIR)\lib\Qt6Cored.lib;dxgi.lib;d3d11.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <DataExecutionPrevention>true</DataExecutionPrevention>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -327,6 +327,18 @@
       <QtMocDir>$(Configuration)</QtMocDir>
       <QtMocFileName>moc_%(Filename).cpp</QtMocFileName>
     </QtMoc>
+    <FxCompile>
+      <EntryPointName>
+      </EntryPointName>
+      <ShaderType>
+      </ShaderType>
+      <DisableOptimizations>true</DisableOptimizations>
+      <EnableDebuggingInformation>true</EnableDebuggingInformation>
+      <ShaderModel>4.0_level_9_1</ShaderModel>
+    </FxCompile>
+    <Manifest>
+      <EnableDpiAwareness>true</EnableDpiAwareness>
+    </Manifest>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="managers\DefaultCommandManager.cpp" />
@@ -340,7 +352,9 @@
     <ClCompile Include="managers\hookManager.cpp" />
     <ClCompile Include="util\IDGXI\DisplayManager.cpp" />
     <ClCompile Include="util\IDGXI\DuplicationManager.cpp" />
+    <ClCompile Include="util\IDGXI\networkOutManager.cpp" />
     <ClCompile Include="util\IDGXI\OutputManager.cpp" />
+    <ClCompile Include="util\IDGXI\ThreadManager.cpp" />
     <ClCompile Include="util\imageUtil.cpp" />
     <ClCompile Include="channel\inputCommandInterceptor.cpp" />
     <ClCompile Include="rdplib.cpp" />
@@ -368,7 +382,9 @@
     <ClInclude Include="util\IDGXI\CommonTypes.h" />
     <ClInclude Include="util\IDGXI\DisplayManager.h" />
     <ClInclude Include="util\IDGXI\DuplicationManager.h" />
+    <ClInclude Include="util\IDGXI\networkOutManager.hpp" />
     <ClInclude Include="util\IDGXI\OutputManager.h" />
+    <ClInclude Include="util\IDGXI\ThreadManager.h" />
     <ClInclude Include="util\imageUtil.hpp" />
     <ClInclude Include="channel\inputCommandInterceptor.hpp" />
     <ClInclude Include="rdpLib_global.h" />
@@ -406,8 +422,18 @@
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="util\IDGXI\PixelShader.hlsl" />
-    <FxCompile Include="util\IDGXI\VertexShader.hlsl" />
+    <FxCompile Include="util\IDGXI\PixelShader.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
+      <HeaderFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">PixelShader.h</HeaderFileOutput>
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">PS</EntryPointName>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">4.0_level_9_1</ShaderModel>
+    </FxCompile>
+    <FxCompile Include="util\IDGXI\VertexShader.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
+      <HeaderFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">VertexShader.h</HeaderFileOutput>
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">VS</EntryPointName>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">4.0_level_9_1</ShaderModel>
+    </FxCompile>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">

@@ -3,13 +3,14 @@
 #include <atomic>
 #include <QCoreApplication>
 #include <QEventLoop>
-class IDeamon:public QObject
+#include "rdpLib_global.h"
+class RDPLIB_EXPORT IDeamon:public QObject
 {
     Q_OBJECT
     protected:
     virtual void Run()=0;
 public slots:
-    void Start();
+    void Start(QString);
      void Stop();
 
 

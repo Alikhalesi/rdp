@@ -18,7 +18,7 @@ struct PS_INPUT
 //--------------------------------------------------------------------------------------
 // Pixel Shader
 //--------------------------------------------------------------------------------------
-float4 PS(PS_INPUT input) : SV_Target
+float4 PS(PS_INPUT input) : SV_TARGET
 {
     return tx.Sample( samLinear, input.Tex );
 }

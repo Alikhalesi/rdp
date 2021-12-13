@@ -115,7 +115,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="QtSettings">
     <QtInstall>6.2.1_msvc2019_64</QtInstall>
     <QtModules>core;opengl;network;gui;qml;quick</QtModules>
-    <QtDeploy>true</QtDeploy>
+    <QtDeploy>false</QtDeploy>
   </PropertyGroup>
   <PropertyGroup Label="QtSettings" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <QtInstall>6.2.1_msvc2019_64</QtInstall>
@@ -353,6 +353,14 @@
       <QtMocDir>$(Configuration)</QtMocDir>
       <QtMocFileName>moc_%(Filename).cpp</QtMocFileName>
     </QtMoc>
+    <Manifest>
+      <EnableDpiAwareness>true</EnableDpiAwareness>
+      <UpdateFileHashes>true</UpdateFileHashes>
+      <OutputManifestFile>$(IntDir)$(TargetName)$(TargetExt).embed.manifest</OutputManifestFile>
+    </Manifest>
+    <ManifestResourceCompile>
+      <ResourceOutputFileName>$(IntDir)$(TargetName)$(TargetExt).embed.manifest.res</ResourceOutputFileName>
+    </ManifestResourceCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="streamer\DesktopFrameGenerator.cpp" />
