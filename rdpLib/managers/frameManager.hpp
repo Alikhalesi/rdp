@@ -14,7 +14,7 @@ public:
     FrameWriter GetBufferForWrite();
 
     std::pair<unsigned char*,unsigned int>  GetCopyFromFrame();
-
+    unsigned int AllocationLen() const;
     unsigned int GetFrameLen();
     ~FrameManager();
 private:
@@ -24,7 +24,8 @@ private:
     unsigned char* currentFrame_=nullptr;
     unsigned char* currentFrameCopy_=nullptr;
     unsigned int frameLen_=0;
-    unsigned int allocationLen_=1007452;
+	//TODO: make framebuffer dynamic len
+   const unsigned int allocationLen_=10*1024*1024;
     SpinLock spinLock_;
 };
 class RDPLIB_EXPORT FrameWriter

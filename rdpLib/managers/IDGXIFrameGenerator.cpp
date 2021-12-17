@@ -109,23 +109,58 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 //=============================================================================================
 int IDGXIFrameGenerator::StartWork()
 {
-
-    INT SingleOutput=-1;
-
-    // Synchronization
-    
-
-    // Window
-    HWND WindowHandle = nullptr;
-
    
+      
 
+
+    return 0;
+}
+//=============================================================================================
+void IDGXIFrameGenerator::Run()
+{
+    if (WaitForSingleObjectEx(UnexpectedErrorEvent, 0, FALSE) == WAIT_OBJECT_0)
+    {
+        // Unexpected error occurred so exit the application
+        throw std::exception{ "UnexpectedErrorEvent" };
+
+    }
+    if (WaitForSingleObjectEx(ExpectedErrorEvent, 0, FALSE) == WAIT_OBJECT_0)
+    {
+        InitDX();
+    }
+
+    auto res = OutMgr.UpdateFrameBuffer();
+
+	
+}
+//=============================================================================================
+void IDGXIFrameGenerator::Start(QString s)
+{
+    InitDX();
+    IDeamon::Start(s);
+}
+//=============================================================================================
+void IDGXIFrameGenerator::Stop()
+{
+    
+    // Make sure all other threads have exited
+    if (SetEvent(TerminateThreadsEvent))
+    {
+        ThreadMgr.WaitForThreadTermination();
+    }
+    IDeamon::Stop();
+}
+
+//=============================================================================================
+IDGXIFrameGenerator::IDGXIFrameGenerator()
+{
+    
     // Event used by the threads to signal an unexpected error and we want to quit the app
     UnexpectedErrorEvent = CreateEvent(nullptr, TRUE, FALSE, nullptr);
     if (!UnexpectedErrorEvent)
     {
         ProcessFailure(nullptr, L"UnexpectedErrorEvent creation failed", L"Error", E_UNEXPECTED);
-        return 0;
+        // return 0;
     }
 
     // Event for when a thread encounters an expected error
@@ -133,7 +168,7 @@ int IDGXIFrameGenerator::StartWork()
     if (!ExpectedErrorEvent)
     {
         ProcessFailure(nullptr, L"ExpectedErrorEvent creation failed", L"Error", E_UNEXPECTED);
-        return 0;
+        // return 0;
     }
 
     // Event to tell spawned threads to quit
@@ -141,193 +176,9 @@ int IDGXIFrameGenerator::StartWork()
     if (!TerminateThreadsEvent)
     {
         ProcessFailure(nullptr, L"TerminateThreadsEvent creation failed", L"Error", E_UNEXPECTED);
-        return 0;
+        //  return 0;
     }
 
-    // Load simple cursor
-    HCURSOR Cursor = nullptr;
-    Cursor = LoadCursor(nullptr, IDC_ARROW);
-    if (!Cursor)
-    {
-        ProcessFailure(nullptr, L"Cursor load failed", L"Error", E_UNEXPECTED);
-        return 0;
-    }
-
-    // Register class
-    WNDCLASSEXW Wc;
-    Wc.cbSize = sizeof(WNDCLASSEXW);
-    Wc.style = CS_HREDRAW | CS_VREDRAW;
-    Wc.lpfnWndProc = WndProc;
-    Wc.cbClsExtra = 0;
-    Wc.cbWndExtra = 0;
-    Wc.hInstance = GetModuleHandleA(0);
-    Wc.hIcon = nullptr;
-    Wc.hCursor = Cursor;
-    Wc.hbrBackground = nullptr;
-    Wc.lpszMenuName = nullptr;
-    Wc.lpszClassName = L"ddasample";
-    Wc.hIconSm = nullptr;
-    if (!RegisterClassExW(&Wc))
-    {
-        ProcessFailure(nullptr, L"Window class registration failed", L"Error", E_UNEXPECTED);
-        return 0;
-    }
-
-    // Create window
-    RECT WindowRect = { 0, 0, 800, 600 };
-    AdjustWindowRect(&WindowRect, WS_OVERLAPPEDWINDOW, FALSE);
-    WindowHandle = CreateWindowW(L"ddasample", L"DXGI desktop duplication sample",
-        WS_OVERLAPPEDWINDOW,
-        0, 0,
-        WindowRect.right - WindowRect.left, WindowRect.bottom - WindowRect.top,
-        nullptr, nullptr, GetModuleHandleA(0), nullptr);
-    if (!WindowHandle)
-    {
-        ProcessFailure(nullptr, L"Window creation failed", L"Error", E_FAIL);
-        return 0;
-    }
-
-    DestroyCursor(Cursor);
-
-    ShowWindow(WindowHandle, SW_SHOWNORMAL);
-    UpdateWindow(WindowHandle);
-
-    THREADMANAGER ThreadMgr;
-    RECT DeskBounds;
-    UINT OutputCount;
-
-    // Message loop (attempts to update screen when no other messages to process)
-    MSG msg = { 0 };
-    bool FirstTime = true;
-    bool Occluded = true;
-    DYNAMIC_WAIT DynamicWait;
-
-    while (WM_QUIT != msg.message)
-    {
-        DUPL_RETURN Ret = DUPL_RETURN_SUCCESS;
-        if (PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE))
-        {
-            if (msg.message == OCCLUSION_STATUS_MSG)
-            {
-                // Present may not be occluded now so try again
-                Occluded = false;
-            }
-            else
-            {
-                // Process window messages
-                TranslateMessage(&msg);
-                DispatchMessage(&msg);
-            }
-        }
-        else if (WaitForSingleObjectEx(UnexpectedErrorEvent, 0, FALSE) == WAIT_OBJECT_0)
-        {
-            // Unexpected error occurred so exit the application
-            break;
-        }
-        else if (FirstTime || WaitForSingleObjectEx(ExpectedErrorEvent, 0, FALSE) == WAIT_OBJECT_0)
-        {
-            if (!FirstTime)
-            {
-                // Terminate other threads
-                SetEvent(TerminateThreadsEvent);
-                ThreadMgr.WaitForThreadTermination();
-                ResetEvent(TerminateThreadsEvent);
-                ResetEvent(ExpectedErrorEvent);
-
-                // Clean up
-                ThreadMgr.Clean();
-                OutMgr.CleanRefs();
-
-                // As we have encountered an error due to a system transition we wait before trying again, using this dynamic wait
-                // the wait periods will get progressively long to avoid wasting too much system resource if this state lasts a long time
-                DynamicWait.Wait();
-            }
-            else
-            {
-                // First time through the loop so nothing to clean up
-                FirstTime = false;
-            }
-
-            // Re-initialize
-            Ret = OutMgr.InitOutput(WindowHandle, SingleOutput, &OutputCount, &DeskBounds);
-            if (Ret == DUPL_RETURN_SUCCESS)
-            {
-                HANDLE SharedHandle = OutMgr.GetSharedHandle();
-                if (SharedHandle)
-                {
-                    Ret = ThreadMgr.Initialize(SingleOutput, OutputCount, UnexpectedErrorEvent, ExpectedErrorEvent, TerminateThreadsEvent, SharedHandle, &DeskBounds);
-                }
-                else
-                {
-                    DisplayMsg(L"Failed to get handle of shared surface", L"Error", S_OK);
-                    Ret = DUPL_RETURN_ERROR_UNEXPECTED;
-                }
-            }
-
-            // We start off in occluded state and we should immediate get a occlusion status window message
-            Occluded = true;
-        }
-        else
-        {
-            // Nothing else to do, so try to present to write out to window if not occluded
-            if (!Occluded)
-            {
-                Ret = OutMgr.UpdateApplicationWindow(ThreadMgr.GetPointerInfo(), &Occluded);
-                OutMgr.UpdateFrameBuffer(ThreadMgr.GetPointerInfo());
-            }
-        }
-
-        // Check if for errors
-        if (Ret != DUPL_RETURN_SUCCESS)
-        {
-            if (Ret == DUPL_RETURN_ERROR_EXPECTED)
-            {
-                // Some type of system transition is occurring so retry
-                SetEvent(ExpectedErrorEvent);
-            }
-            else
-            {
-                // Unexpected error so exit
-                break;
-            }
-        }
-    }
-
-    // Make sure all other threads have exited
-    if (SetEvent(TerminateThreadsEvent))
-    {
-        ThreadMgr.WaitForThreadTermination();
-    }
-
-    // Clean up
-    CloseHandle(UnexpectedErrorEvent);
-    CloseHandle(ExpectedErrorEvent);
-    CloseHandle(TerminateThreadsEvent);
-
-    if (msg.message == WM_QUIT)
-    {
-        // For a WM_QUIT message we should return the wParam value
-        return static_cast<INT>(msg.wParam);
-    }
-
-    return 0;
-}
-//=============================================================================================
-void IDGXIFrameGenerator::Run()
-{
-  
-
-	
-}
-//=============================================================================================
-IDGXIFrameGenerator::IDGXIFrameGenerator()
-{
-    std::thread t{ [this]() {StartWork(); } };
-   // t.join();
-    t.detach();
-
-
-   
 }
 //=============================================================================================
 IDGXIFrameGenerator::~IDGXIFrameGenerator()
@@ -338,6 +189,44 @@ IDGXIFrameGenerator::~IDGXIFrameGenerator()
 }
 
 //=====================================================================================================================
+
+void IDGXIFrameGenerator::InitDX()
+{
+    INT SingleOutput = -1;
+    DYNAMIC_WAIT DynamicWait;
+    RECT DeskBounds;
+    UINT OutputCount;
+    SetEvent(TerminateThreadsEvent);
+    ThreadMgr.WaitForThreadTermination();
+    ResetEvent(TerminateThreadsEvent);
+    ResetEvent(ExpectedErrorEvent);
+
+    // Clean up
+    ThreadMgr.Clean();
+    OutMgr.CleanRefs();
+
+    // As we have encountered an error due to a system transition we wait before trying again, using this dynamic wait
+    // the wait periods will get progressively long to avoid wasting too much system resource if this state lasts a long time
+    DynamicWait.Wait();
+	
+   auto Ret = OutMgr.InitOutput(SingleOutput, &OutputCount, &DeskBounds);
+   if (Ret == DUPL_RETURN_SUCCESS)
+   {
+       HANDLE SharedHandle = OutMgr.GetSharedHandle();
+       if (SharedHandle)
+       {
+           Ret = ThreadMgr.Initialize(SingleOutput, OutputCount, UnexpectedErrorEvent, ExpectedErrorEvent, TerminateThreadsEvent, SharedHandle, &DeskBounds);
+         if  (Ret == DUPL_RETURN_SUCCESS)
+       	{
+             return;
+       	}
+       }
+   }
+
+   throw std::exception{ "InitDX" };
+	
+}
+
 DWORD WINAPI DDProc(_In_ void* Param)
 {
     // Classes

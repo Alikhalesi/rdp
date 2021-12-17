@@ -32,6 +32,12 @@ if(currentFrame_[0]=='a' && currentFrame_[1]=='d')
     return std::make_pair(currentFrameCopy_,frameLen_);
 }
 //=====================================================================================================
+unsigned FrameManager::AllocationLen() const
+{
+    return allocationLen_;
+}
+
+//=====================================================================================================
 unsigned int FrameManager::GetFrameLen()
 {
     return frameLen_;

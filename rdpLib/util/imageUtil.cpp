@@ -1,5 +1,10 @@
 #include "imageUtil.hpp"
 #include <gdiplus.h>
+
+
+#include "arrayPool.hpp"
+#include "mallocIstream.hpp"
+#include "managers/frameManager.hpp"
 using namespace Gdiplus;
 ImageUtil::ImageUtil()
 {
@@ -13,30 +18,30 @@ void ImageUtil::ConvertJPegToHbitmap(unsigned char *input,unsigned int len, HWND
 {
     CLSID   encoderClsid;
     Status  stat;
-    CComPtr<IStream> srcstream;
-   // auto hr= CreateStreamOnHGlobal(input,false,&srcstream);
-    HRESULT hr;
-    srcstream = SHCreateMemStream(input, len);
+
+    const CComPtr<IStream> srcstream=new MallocIStream{input,len,false};
+
+    const auto bufferSize = FrameManager::GetInstance().AllocationLen();
+    auto poolArray = ArrayPool<unsigned char>::GetInstance().GetArray(bufferSize);
+    CComPtr<IStream> tempStream = new MallocIStream(poolArray.get(), bufferSize, false);
+ 
+ 
     Image*   image = Image::FromStream(srcstream);
-    qDebug()<<"stream img height: "<< image->GetHeight();
-
-
-    CComPtr<IStream> desstream=SHCreateMemStream(nullptr,0);
+   //assert(image->GetHeight()>0);
+ 
 
 
     GetEncoderClsid(L"image/bmp", &encoderClsid);
-   // image->Save(L"d:\\bmp.bmp", &encoderClsid);
-    stat = image->Save(desstream, &encoderClsid, NULL);
-   // assert(stat==S_OK);
+  
+    stat = image->Save(tempStream, &encoderClsid, NULL);
+    //assert(stat==S_OK);
 
-      auto* resultBmp=  Bitmap::FromStream(desstream);
+      auto* resultBmp=  Bitmap::FromStream(tempStream);
        Color color;
-      // resultBmp->Save(L"d:\\bxmp.bmp", &encoderClsid);
+     
        HBITMAP bitmap;
        stat= resultBmp->GetHBITMAP(color,&bitmap);
-      //  assert(stat==S_OK);
-
-        //bitblitingTo window
+    
         DrawBitmap(hwnd,bitmap);
 delete resultBmp;
 
@@ -54,13 +59,13 @@ int ImageUtil::GetEncoderClsid(const WCHAR* format, CLSID* pClsid)
    UINT  num = 0;          // number of image encoders
    UINT  size = 0;         // size of the image encoder array in bytes
 
-   ImageCodecInfo* pImageCodecInfo = NULL;
+   Gdiplus::ImageCodecInfo* pImageCodecInfo = NULL;
 
    GetImageEncodersSize(&num, &size);
    if(size == 0)
       return -1;  // Failure
 
-   pImageCodecInfo = (ImageCodecInfo*)(malloc(size));
+   pImageCodecInfo = (Gdiplus::ImageCodecInfo*)(malloc(size));
    if(pImageCodecInfo == NULL)
       return -1;  // Failure
 
@@ -250,16 +255,19 @@ qDebug()<<"hbitmap height: "<< image->GetHeight();
 
     CComPtr<IWICBitmapEncoder> wicEncoder;
      hr = wicFactory->CreateEncoder(
-      //GUID_ContainerFormatBmp,
-        GUID_ContainerFormatJpeg,
+      GUID_ContainerFormatBmp,
+    //    GUID_ContainerFormatJpeg,
          nullptr,
          &wicEncoder);
      if (FAILED(hr)) {
          throw std::exception("Failed to create BMP encoder");
      }
      //
-     CComPtr<IStream> srcstream=nullptr;
-    srcstream =SHCreateMemStream(nullptr, 0);
+     
+
+     auto poolArray = ArrayPool<unsigned char>::GetInstance().GetArray(*len);
+     CComPtr<IStream> srcstream = new MallocIStream(poolArray.get(), *len, false);
+    //srcstream =SHCreateMemStream(nullptr, 0);
    //  hr = CreateStreamOnHGlobal(input, false, &srcstream);
 
 	//
@@ -279,6 +287,9 @@ qDebug()<<"hbitmap height: "<< image->GetHeight();
          throw std::exception( "Failed to initialize bitmap encoder");
      }
      IPropertyBag2* pPropertybag = NULL;
+     PROPBAG2 option = { 0 };
+	
+    
      // Encode and commit the frame
      {
 	    CComPtr<IWICBitmapFrameEncode> frameEncode;
@@ -286,28 +297,8 @@ qDebug()<<"hbitmap height: "<< image->GetHeight();
          if (FAILED(hr)) {
              throw std::exception( "Failed to create IWICBitmapFrameEncode");
          }
-     
-         //if (SUCCEEDED(hr))
-         //{
-         //    // This is how you customize the TIFF output.
-         //    PROPBAG2 option = { 0 };
-         //    wchar_t ppname[20]={0};
-         //	
-         //    wcscpy_s(ppname, L"ImageQuality");
-         //	
-         //    option.pstrName = ppname;
- 
-         //    VariantInit(&varValue);
-         //    varValue.vt 
-         //    varValue.bVal = 1;
-         //    hr = pPropertybag->Write(1, &option, &varValue);
-         //    if (SUCCEEDED(hr))
-         //    {
-         //        hr = frameEncode->Initialize(pPropertybag);
-         //    }
-         //}
 
-     	
+           	
         hr = frameEncode->Initialize(nullptr);
          if (FAILED(hr)) {
              throw std::exception( "Failed to initialize IWICBitmapFrameEncode");
@@ -346,21 +337,29 @@ qDebug()<<"hbitmap height: "<< image->GetHeight();
          throw std::exception( "Failed to commit encoder");
      }
 
-
-	//get len
-     LARGE_INTEGER seekPos = { 0 };
+     LARGE_INTEGER seekPos = { 0,0 };
+     seekPos.QuadPart = 0;
      ULARGE_INTEGER imageSize;
-     hr = srcstream->Seek(seekPos, STREAM_SEEK_CUR, &imageSize);
-   //  assert(hr == S_OK && imageSize.HighPart == 0);
-     *len = imageSize.LowPart;
-     hr = srcstream->Seek(seekPos, STREAM_SEEK_SET, &imageSize);
 
-     srcstream->Read(input, *len, 0);
- //    ImageUtil img3{};
- //    Image* img = Bitmap::FromStream(srcstream, false);
- //    CLSID   encoderClsid;
- //    auto x = img->GetHeight();
-	//img3.GetEncoderClsid(L"image/jpeg", &encoderClsid);
- //    img->Save(L"d:\\rrr.jpg", &encoderClsid, NULL);
-   //  srcstream->Read(output, *len, 0);
+     hr = srcstream->Seek(seekPos, STREAM_SEEK_SET,nullptr);
+
+    
+ 
+     ImageUtil img3{};
+     auto img = std::unique_ptr<Image>{ Bitmap::FromStream(srcstream, false) };
+     CLSID   encoderClsid;
+   assert(img->GetHeight()>0);
+	img3.GetEncoderClsid(L"image/jpeg", &encoderClsid);
+  
+    hr = srcstream->Seek(seekPos, STREAM_SEEK_SET, nullptr);
+
+    CComPtr<IStream> deststream = new MallocIStream{ input,*len,false };
+
+  
+     img->Save(deststream, &encoderClsid, nullptr);
+     img->Save(L"d:\\dd.jpg", &encoderClsid, nullptr);
+     hr = deststream->Seek(seekPos, STREAM_SEEK_CUR, &imageSize);
+     
+     *len = imageSize.LowPart;
+ 
  }

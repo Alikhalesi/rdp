@@ -11,6 +11,7 @@
 
 #include "util/IDGXI/networkOutManager.hpp"
 #include "util/IDGXI/OutputManager.h"
+#include "util/IDGXI/ThreadManager.h"
 
 
 class RDPLIB_EXPORT IDGXIFrameGenerator:public IFrameGenerationManager
@@ -18,15 +19,19 @@ class RDPLIB_EXPORT IDGXIFrameGenerator:public IFrameGenerationManager
 public:
 	IDGXIFrameGenerator();
 	void Run() override;
-	DUPLICATIONMANAGER duplicationMngr_;
+	virtual void Start(QString) override;
+	virtual void Stop() override;
+
 	virtual ~IDGXIFrameGenerator();
 
 private:
+	void InitDX();
 	int StartWork();
 	HANDLE UnexpectedErrorEvent = nullptr;
 	HANDLE ExpectedErrorEvent = nullptr;
 	HANDLE TerminateThreadsEvent = nullptr;
 	NetworkOutmanager OutMgr;
+	THREADMANAGER ThreadMgr;
 	
 	
 };

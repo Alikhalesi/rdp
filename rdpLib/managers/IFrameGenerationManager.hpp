@@ -9,4 +9,5 @@ class RDPLIB_EXPORT IFrameGenerationManager :public IDeamon
 {
 protected:
 	virtual void Run() = 0;
+
 };

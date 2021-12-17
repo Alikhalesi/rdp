@@ -10,10 +10,10 @@ class RDPLIB_EXPORT IDeamon:public QObject
     protected:
     virtual void Run()=0;
 public slots:
-    void Start(QString);
-     void Stop();
+   virtual void Start(QString);
+     virtual void Stop();
 
 
-private:
+protected:
      std::atomic_flag stopped_;
 };

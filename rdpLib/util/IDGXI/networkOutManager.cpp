@@ -1,10 +1,6 @@
 #include "networkOutManager.hpp"
-
-
-#include "managers/frameManager.hpp"
-#include "util/imageUtil.hpp"
 //====================================================================================
-DUPL_RETURN NetworkOutmanager::UpdateFrameBuffer(PTR_INFO* PointerInfo)
+DUPL_RETURN NetworkOutmanager::UpdateFrameBuffer() const
 {
     HRESULT hr = m_KeyMutex->AcquireSync(1, INFINITE);
    if (FAILED(hr))
@@ -13,7 +9,7 @@ DUPL_RETURN NetworkOutmanager::UpdateFrameBuffer(PTR_INFO* PointerInfo)
     }
     {
      auto frameWriter=   FrameManager::GetInstance().GetBufferForWrite();
-     unsigned int len=-1;
+     unsigned int len = FrameManager::GetInstance().AllocationLen();
      ImageUtil::SaveTextureToJpg(*frameWriter, &len, m_SharedSurf);
      frameWriter.SetFrameLen(len);
     }

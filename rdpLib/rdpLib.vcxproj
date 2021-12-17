@@ -359,6 +359,7 @@
     <ClCompile Include="channel\inputCommandInterceptor.cpp" />
     <ClCompile Include="rdplib.cpp" />
     <ClCompile Include="servertcpchannel.cpp" />
+    <ClCompile Include="util\mallocIstream.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="managers\DefaultCommandManager.hpp" />
@@ -379,6 +380,7 @@
     <ClInclude Include="managers\frameManager.hpp" />
     <QtMoc Include="managers\hookManager.hpp">
     </QtMoc>
+    <ClInclude Include="util\arrayPool.hpp" />
     <ClInclude Include="util\IDGXI\CommonTypes.h" />
     <ClInclude Include="util\IDGXI\DisplayManager.h" />
     <ClInclude Include="util\IDGXI\DuplicationManager.h" />
@@ -391,6 +393,7 @@
     <ClInclude Include="rdplib.h" />
     <QtMoc Include="servertcpchannel.h">
     </QtMoc>
+    <ClInclude Include="util\mallocIstream.hpp" />
     <ClInclude Include="util\spinLock.hpp" />
   </ItemGroup>
   <ItemGroup>
