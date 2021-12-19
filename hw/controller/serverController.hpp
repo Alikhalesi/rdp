@@ -16,12 +16,11 @@ public:
     Q_INVOKABLE void stop();
  signals:
     void newConnection(QString cnnInfo);
-    void imageChanged();
     void stopped();
     void startStream();
     void stopStream();
-    public slots:
-    void newFrame(unsigned char*,unsigned int);
+    
+    
 
 
 private:

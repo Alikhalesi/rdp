@@ -4,8 +4,8 @@ import Qt.labs.platform
 
 ApplicationWindow {
     visible: true
-    height:600
-    width:600
+    //height:au
+    //width:400
     header: ToolBar {
            Flow {
                anchors.fill: parent
@@ -52,14 +52,7 @@ ApplicationWindow {
            }
        }
 
-    Image
-    {
-        id:centerImg
-        cache: false
-        source: "image://_frameImageProvider"
-        height:parent.height
-        width:parent.width
-    }
+
 
     footer: ToolBar {
         Flow{
@@ -87,24 +80,16 @@ ApplicationWindow {
     Connections {
            target: _serverController
            onNewConnection: function(cnnInfo) {
-              //  centerImg.source="image://_frameImageProvider"
                console.log("Data: " + cnnInfo)
                statusIndicator.color="green"
                lblClient.text = "New Connection: "+cnnInfo
            }
 
-           onImageChanged:function()
-           {
-               var oldsrc=centerImg.source;
-               centerImg.source="";
-               centerImg.source=oldsrc;
-               console.log("new image");
-           }
+          
            onStopped:function()
            {
                lblClient.text = "Stopped";
                statusIndicator.color="red"
-               centerImg.source="";
                btnStart.visible=true
                btnStop.visible=false
            }

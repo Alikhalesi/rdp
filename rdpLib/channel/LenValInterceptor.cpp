@@ -20,12 +20,13 @@ while(true)
     readedData_.clear();
 
     QByteArray array2;
+    	
             array2.resize(4);
-            array2[0] = dt[0];
-            array2[1] = dt[1];
-            array2[2] = dt[2];
-            array2[3] = dt[3];
-
+            array2[0] = dt.at(0);
+            array2[1] = dt.at(1);
+            array2[2] = dt.at(2);
+            array2[3] = dt.at(3);
+            
             memcpy(&dataSize_, array2, sizeof(unsigned int));
 
             if(dt.length()<5)

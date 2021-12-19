@@ -30,7 +30,7 @@ void dataReady(QVariant data);
 
 void Error(const QString& err);
 public:
-
+    void SetReadBufferSize(qint64 size);
 
 QByteArray Receive();
 
@@ -46,6 +46,7 @@ void ConnectToHost(const QString& ip,int port);
 QTcpSocket* socket_=nullptr;
 std::vector<std::unique_ptr<IChannelInterceptor>> interceptors_;
 std::recursive_mutex syncLock_;
+qint64 readBufferSize_ = 0;
  private slots:
 void readyRead();
 

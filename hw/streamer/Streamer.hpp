@@ -27,7 +27,7 @@ signals:
   void newConnection(QString ip);
 
   void SendToClient(unsigned char* data,unsigned int len);
-  void ShowOnScreen(unsigned char* data,unsigned int len);
+
 
   void stopped();
 
@@ -94,9 +94,10 @@ if(!stopped_.test_and_set())
     return;
 }
             //get desktop snapshot
-             auto copyOfFrame=FrameManager::GetInstance().GetCopyFromFrame();
+             const auto copyOfFrame=FrameManager::GetInstance().GetCopyFromFrame();
              if(copyOfFrame.first!=nullptr && copyOfFrame.second!=0)
              {
+                
              emit SendToClient(copyOfFrame.first,copyOfFrame.second);
 
              }

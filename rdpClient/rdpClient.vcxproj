@@ -114,6 +114,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="QtSettings">
     <QtInstall>6.2.1_msvc2019_64</QtInstall>
     <QtModules>core;opengl;network;gui;qml;quick</QtModules>
+    <QtQMLDebugEnable>false</QtQMLDebugEnable>
   </PropertyGroup>
   <PropertyGroup Label="QtSettings" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <QtInstall>6.2.1_msvc2019_64</QtInstall>
@@ -410,6 +411,8 @@
     <None Include="ui\FlatSlider.qml" />
     <None Include="ui\Input.qml" />
     <None Include="ui\PrimaryButton.qml" />
+    <None Include="ui\toolbar.qml" />
+    <None Include="ui\ToolbarButton.qml" />
     <None Include="ui\WarningButton.qml" />
     <None Include="ui\main.qml" />
     <QtRcc Include="qml.qrc">

@@ -47,7 +47,7 @@ auto* commandController=new CommandController(std::make_unique<DefaultCommandMan
     engine.rootContext()->setContextProperty( "_serverController", serverController );
 engine.rootContext()->setContextProperty( "_commandController", commandController );
 //serverController->start();
-engine.addImageProvider("_frameImageProvider",FrameImageProvider::GetInstance() );
+//engine.addImageProvider("_frameImageProvider",FrameImageProvider::GetInstance() );
 
 
     const QUrl url(QStringLiteral("qrc:/main.qml"));

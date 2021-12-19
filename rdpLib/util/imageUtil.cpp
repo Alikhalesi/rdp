@@ -26,7 +26,7 @@ void ImageUtil::ConvertJPegToHbitmap(unsigned char *input,unsigned int len, HWND
     CComPtr<IStream> tempStream = new MallocIStream(poolArray.get(), bufferSize, false);
  
  
-    Image*   image = Image::FromStream(srcstream);
+    std::unique_ptr<Image> image{ Image::FromStream(srcstream) };
    //assert(image->GetHeight()>0);
  
 
@@ -36,17 +36,15 @@ void ImageUtil::ConvertJPegToHbitmap(unsigned char *input,unsigned int len, HWND
     stat = image->Save(tempStream, &encoderClsid, NULL);
     //assert(stat==S_OK);
 
-      auto* resultBmp=  Bitmap::FromStream(tempStream);
+    std::unique_ptr<Bitmap> resultBmp{ Bitmap::FromStream(tempStream) };
        Color color;
      
        HBITMAP bitmap;
        stat= resultBmp->GetHBITMAP(color,&bitmap);
     
         DrawBitmap(hwnd,bitmap);
-delete resultBmp;
 
 
-    delete image;
 }
 //====================================================================================================================
 ImageUtil::~ImageUtil()

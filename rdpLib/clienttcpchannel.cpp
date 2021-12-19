@@ -9,7 +9,6 @@ ClientTcpChannel::ClientTcpChannel(std::vector<std::unique_ptr<IChannelIntercept
   ,interceptors_{std::move(interceptors)}
 {
 
-
 }
 //=====================================================================================
 void ClientTcpChannel::Start(const QString &ip, int port)
@@ -17,6 +16,7 @@ void ClientTcpChannel::Start(const QString &ip, int port)
      std::lock_guard lock{syncLock_};
     QNetworkProxyFactory::setUseSystemConfiguration(false);
     socket_=new QTcpSocket(this);
+    socket_->setReadBufferSize(readBufferSize_);
     connect(socket_,SIGNAL(connected()),this,SIGNAL(connected()),Qt::DirectConnection);
     connect(socket_,SIGNAL(disconnected()),this,SIGNAL(disconnected()),Qt::DirectConnection);
     connect(socket_,SIGNAL(readyRead()),this,SLOT(readyRead()),Qt::DirectConnection);
@@ -68,6 +68,12 @@ void ClientTcpChannel::SendAndDelete(std::shared_ptr<char[]> data, int len)
 
     assert(written==len);
 }
+//======================================================================
+void ClientTcpChannel::SetReadBufferSize(qint64 size)
+{
+        readBufferSize_=size;
+}
+
 //=====================================================================================
 void ClientTcpChannel::Disconnect()
 {
@@ -93,7 +99,7 @@ std::lock_guard lock{syncLock_};
 void ClientTcpChannel::SocketError(QAbstractSocket::SocketError socketError)
 {
 
-  emit Error(QVariant::fromValue(socketError).toString()+":"+socket_->errorString());
+  emit Error(QVariant::fromValue(socketError).toString() +":"+socket_->errorString());
 
 }
 

@@ -3,7 +3,6 @@
 
 ServerController::ServerController()
 {
-    connect(&streamer,SIGNAL(ShowOnScreen(unsigned char*,unsigned int)),this,SLOT(newFrame(unsigned char*,unsigned int)),Qt::QueuedConnection);
     connect(&streamer,SIGNAL(newConnection(QString)),this,SIGNAL(newConnection(QString)), Qt::QueuedConnection);
     connect(&streamer,SIGNAL(stopped()),this,SIGNAL(stopped()),Qt::QueuedConnection);
     connect(this,SIGNAL(startStream()),&streamer,SLOT(Start()),Qt::QueuedConnection);
@@ -28,8 +27,3 @@ void ServerController::stop()
 
 }
 //======================================================================================================
-void ServerController::newFrame(unsigned char *data, unsigned int len)
-{
-  //  FrameImageProvider::GetInstance()->SetImageData(std::make_pair(data,len));
-   // emit imageChanged();
-}

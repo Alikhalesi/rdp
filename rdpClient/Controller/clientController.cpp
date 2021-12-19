@@ -10,6 +10,7 @@ ClientController::ClientController(QObject *parent)
    interceptors.push_back(std::make_unique<LenValInterceptor>());
 
     channel_=new ClientTcpChannel(std::move(interceptors));
+    channel_->SetReadBufferSize(300 * 1024);
     connect(channel_,SIGNAL(connected()),this,SIGNAL(connected()),Qt::QueuedConnection);
     connect(channel_,SIGNAL(disconnected()),this,SIGNAL(disconnected()),Qt::QueuedConnection);
     connect(channel_,&ClientTcpChannel::Error,this,&ClientController::onError,Qt::QueuedConnection);

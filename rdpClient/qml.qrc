@@ -11,5 +11,11 @@
         <file>ui/PrimaryButton.qml</file>
         <file>ui/WarningButton.qml</file>
         <file>ui/main.qml</file>
+        <file>ui/toolbar.qml</file>
+        <file>ui/ToolbarButton.qml</file>
+		
+		<file>resources/icons8-no-entry-48.png</file>
+        <file>resources/icons8-play-48.png</file>
+        <file>resources/icons8-shutdown-48.png</file>
     </qresource>
 </RCC>
