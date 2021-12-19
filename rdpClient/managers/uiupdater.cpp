@@ -2,18 +2,9 @@
 
 uiUpdater::uiUpdater(QObject *parent) : QObject(parent)
 {
-     showWindow =std::make_unique<QWindow>();
-     const auto hwnd = (HWND)showWindow->winId();
-     LONG lExStyle = GetWindowLong(hwnd, GWL_EXSTYLE);
-     lExStyle &= ~(WS_EX_DLGMODALFRAME | WS_EX_CLIENTEDGE | WS_EX_STATICEDGE);
-     SetWindowLong(hwnd, GWL_EXSTYLE, lExStyle);
-
-     SetWindowPos(hwnd, NULL, 0, 0, 0, 0, SWP_FRAMECHANGED | SWP_NOMOVE | SWP_NOSIZE | SWP_NOZORDER | SWP_NOOWNERZORDER);
-
-   //  ShowWindow(hWnd, SW_SHOW); //display window
-  
-     showWindow->showMaximized();
-  //  showWindow->show();
+    
+    showWindow.set_borderless(true);
+   
 }
 //==============================================================================
 uiUpdater *uiUpdater::GetInstance()
@@ -51,7 +42,7 @@ void uiUpdater::UpdateImage()
      // FrameImageProvider::GetInstance()->SetImageData(copyOfFrame);
        // emit newImage();
 
-        imageUtil_.ConvertJPegToHbitmap(copyOfFrame.first,copyOfFrame.second,(HWND)showWindow->winId());
+        imageUtil_.ConvertJPegToHbitmap(copyOfFrame.first,copyOfFrame.second, showWindow.GetHandle());
     }
 
 }

@@ -345,6 +345,7 @@
     <ClCompile Include="components\FrameImageProvider.cpp" />
     <ClCompile Include="components\FrameWriter.cpp" />
     <ClCompile Include="managers\IDGXIFrameGenerator.cpp" />
+    <ClCompile Include="util\BorderlessWindow.cpp" />
     <ClCompile Include="util\IDeamon.cpp" />
     <ClCompile Include="channel\LenValInterceptor.cpp" />
     <ClCompile Include="clienttcpchannel.cpp" />
@@ -381,6 +382,7 @@
     <QtMoc Include="managers\hookManager.hpp">
     </QtMoc>
     <ClInclude Include="util\arrayPool.hpp" />
+    <ClInclude Include="util\BorderlessWindow.hpp" />
     <ClInclude Include="util\IDGXI\CommonTypes.h" />
     <ClInclude Include="util\IDGXI\DisplayManager.h" />
     <ClInclude Include="util\IDGXI\DuplicationManager.h" />

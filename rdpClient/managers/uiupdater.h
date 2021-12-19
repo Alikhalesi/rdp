@@ -10,6 +10,7 @@
 #include <util/imageUtil.hpp>
 #include <QWindow>
 #include <memory>
+#include <util/BorderlessWindow.hpp>
 class uiUpdater : public QObject
 {
     Q_OBJECT
@@ -29,7 +30,7 @@ private:
     void UpdateImage();
     static uiUpdater* instance_;
     ImageUtil imageUtil_;
-     std::unique_ptr<QWindow> showWindow;
+     BorderlessWindow showWindow;
 };
 
 #endif // UIUPDATER_H
