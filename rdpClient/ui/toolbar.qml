@@ -12,7 +12,7 @@ Window {
     x: Screen.desktopAvailableWidth / 2 - width / 2
     y: -height+root.windowEdge
     title: qsTr("Toolbar")
-    flags: Qt.ToolTip | Qt.FramelessWindowHint | Qt.WA_TranslucentBackground |Qt.WindowStaysOnTopHint 
+    flags: Qt.ToolTip | Qt.FramelessWindowHint | Qt.WA_TranslucentBackground |Qt.WindowStaysOnTopHint
     color: "#00000000"
 
     Behavior on y {
@@ -69,32 +69,123 @@ Window {
     }
 
     ToolbarButton {
-        property bool started: false
         id: imgStartStop
-        source: !started?
-                    "qrc:/resources/icons8-play-48.png":
-                    "qrc:/resources/icons8-no-entry-48.png"
-
         anchors.verticalCenter: parent.verticalCenter
         anchors.left: parent.left
         anchors.leftMargin: 30
 
-        onClicked: {
-            if (!parent.started)
-            {                console.log('play');
-              _clientController.start(txtIp.text)
-            }
-            
-            else
-            {
-            console.log('stop')
-            _clientController.stop();
-            }
-            parent.started = !parent.started
+        CustomBusyIndicator {
+            id: indicator
+            anchors.fill: parent
+            anchors.margins: -3
+            running: true
         }
+
+        //        Timer {
+        //            id: fakeConn
+        //            interval: 3000
+        //            running: imgStartStop.state === "connecting"
+        //            repeat: false
+        //            onTriggered: {
+        //                imgStartStop.state = "error"
+        //            }
+        //        }
+
+        onClicked: {
+
+            if (state === "stopped")
+            {
+                state = "started" // "connecting"
+                console.log('play');
+                _clientController.start(txtIp.text)
+            }
+            else if (state === "started")
+            {
+                state = "stopped"
+                console.log('stop')
+                _clientController.stop();
+            }
+            else if (state === "connecting")
+            {
+                // do nothing on clicked
+            }
+            else if (state === "error")
+            {
+                state = "stopped"
+            }
+        }
+
+        Component.onCompleted: {
+            state = "stopped"
+        }
+
+
+        states: [
+            State {
+                name: "stopped"
+                PropertyChanges {
+                    target: imgStartStop
+                    source: "qrc:/resources/icons8-play-48.png"
+                }
+                PropertyChanges {
+                    target: indicator
+                    visible: false
+                }
+                PropertyChanges {
+                    target: txtIpBg
+                    visible: true
+                }
+            },
+            State {
+                name: "started"
+                PropertyChanges {
+                    target: imgStartStop
+                    source: "qrc:/resources/icons8-no-entry-48.png"
+                }
+                PropertyChanges {
+                    target: indicator
+                    visible: false
+                }
+                PropertyChanges {
+                    target: txtIpBg
+                    visible: false
+                }
+            },
+            State {
+                name: "connecting"
+                PropertyChanges {
+                    target: imgStartStop
+                    source: ""
+                }
+                PropertyChanges {
+                    target: indicator
+                    visible: true
+                }
+                PropertyChanges {
+                    target: txtIpBg
+                    visible: false
+                }
+            },
+            State {
+                name: "error"
+                PropertyChanges {
+                    target: imgStartStop
+                    source: "qrc:/resources/icons8-error-48.png"
+                }
+                PropertyChanges {
+                    target: indicator
+                    visible: false
+                }
+                PropertyChanges {
+                    target: txtIpBg
+                    visible: false
+                }
+            }
+        ]
     }
 
     Rectangle {
+        id: txtIpBg
         width: 100
         height: 24
         color: "#77FFFFFF"
@@ -103,7 +194,7 @@ Window {
         anchors.horizontalCenter: parent.horizontalCenter
 
         TextInput {
-        id:txtIp
+            id:txtIp
             clip: true
             horizontalAlignment: TextInput.AlignHCenter
             verticalAlignment: TextInput.AlignVCenter
@@ -115,6 +206,20 @@ Window {
         }
     }
 
+    Text {
+        id: txtIpConst
+        clip: true
+        horizontalAlignment: TextInput.AlignHCenter
+        verticalAlignment: TextInput.AlignVCenter
+
+        anchors.fill: txtIpBg
+        anchors.margins: 3
+        anchors.verticalCenter: txtIpBg.verticalCenter
+        text: txtIp.text
+        color: "white"
+        visible: !txtIpBg.visible
+    }
+
     ToolbarButton {
         id: imgExit
         source: "qrc:/resources/icons8-shutdown-48.png"
@@ -124,7 +229,7 @@ Window {
         anchors.rightMargin: 30
 
         onClicked: {
-        Qt.quit();
+            Qt.quit();
             console.log('exit')
         }
     }

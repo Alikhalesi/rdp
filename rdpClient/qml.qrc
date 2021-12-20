@@ -1,13 +1,12 @@
 <RCC>
     <qresource prefix="/">
-
-    
         <file>ui/main.qml</file>
         <file>ui/toolbar.qml</file>
-        <file>ui/ToolbarButton.qml</file>
-		
-		<file>resources/icons8-no-entry-48.png</file>
+        <file>resources/icons8-no-entry-48.png</file>
         <file>resources/icons8-play-48.png</file>
         <file>resources/icons8-shutdown-48.png</file>
+        <file>ui/ToolbarButton.qml</file>
+        <file>resources/icons8-error-48.png</file>
+        <file>ui/CustomBusyIndicator.qml</file>
     </qresource>
 </RCC>
