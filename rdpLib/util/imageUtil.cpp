@@ -30,28 +30,16 @@ void ImageUtil::ConvertJPegToHbitmap(unsigned char *input,unsigned int len, HWND
    assert(image->GetHeight()>0);
 
 
- /*  auto dc = GetDC(hwnd);
+   auto dc = GetDC(hwnd);
 
    Graphics graphics(dc);
    graphics.DrawImage(image.get(), 0, 0);
    
 
-   ReleaseDC(hwnd,dc);*/
+   ReleaseDC(hwnd,dc);
 
-    GetEncoderClsid(L"image/bmp", &encoderClsid);
-  
-    stat = image->Save(tempStream, &encoderClsid, NULL);
-    //assert(stat==S_OK);
-
-    std::unique_ptr<Bitmap> resultBmp{ Bitmap::FromStream(tempStream) };
-       Color color;
+ 
      
-       HBITMAP bitmap;
-       stat= resultBmp->GetHBITMAP(color,&bitmap);
-    
-        DrawBitmap(hwnd,bitmap);
-        DeleteObject(bitmap);
-        //Sleep(500);
 
 }
 //====================================================================================================================
