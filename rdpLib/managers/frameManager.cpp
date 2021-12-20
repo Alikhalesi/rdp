@@ -19,16 +19,18 @@ FrameWriter FrameManager::GetBufferForWrite()
 //=====================================================================================================
 std::pair<unsigned char*,unsigned int>  FrameManager::GetCopyFromFrame()
 {
-    std::lock_guard<SpinLock> lock {spinLock_};
-if(currentFrame_[0]=='a' && currentFrame_[1]=='d')
-{
-    //already sent
-    return std::make_pair(nullptr,0);
-}
+    {
+        std::lock_guard<SpinLock> lock{ spinLock_ };
+        if (currentFrame_[0] == 'a' && currentFrame_[1] == 'd')
+        {
+            //already sent
+            return std::make_pair(nullptr, 0);
+        }
 
-    memcpy(currentFrameCopy_,currentFrame_,frameLen_);
-    currentFrame_[0]='a';
-    currentFrame_[1]='d';
+        memcpy(currentFrameCopy_, currentFrame_, frameLen_);
+        currentFrame_[0] = 'a';
+        currentFrame_[1] = 'd';
+    }
     return std::make_pair(currentFrameCopy_,frameLen_);
 }
 //=====================================================================================================

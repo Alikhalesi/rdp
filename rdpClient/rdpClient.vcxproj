@@ -404,6 +404,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="ui\Constants.qml" />
+    <None Include="ui\CustomBusyIndicator.qml" />
     <None Include="ui\DangerButton.qml" />
     <None Include="ui\DefaultButton.qml" />
     <None Include="ui\Dropdown.qml" />
