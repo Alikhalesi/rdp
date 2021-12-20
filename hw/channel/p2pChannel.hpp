@@ -24,7 +24,7 @@ signals:
 private:
     void Listen(int port);
 
-    void Send(unsigned char *data,unsigned int len);
+
 
 
 private:

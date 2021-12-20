@@ -27,7 +27,7 @@ void ImageUtil::ConvertJPegToHbitmap(unsigned char *input,unsigned int len, HWND
  
  
     std::unique_ptr<Image> image{ Image::FromStream(srcstream) };
-   //assert(image->GetHeight()>0);
+   assert(image->GetHeight()>0);
  
 
 
@@ -43,7 +43,7 @@ void ImageUtil::ConvertJPegToHbitmap(unsigned char *input,unsigned int len, HWND
        stat= resultBmp->GetHBITMAP(color,&bitmap);
     
         DrawBitmap(hwnd,bitmap);
-
+        //Sleep(500);
 
 }
 //====================================================================================================================
@@ -139,7 +139,7 @@ qDebug()<<"hbitmap height: "<< image->GetHeight();
      hDCBits = CreateCompatibleDC(hDC);
      GetObject(hBitmap, sizeof(BITMAP), (LPSTR)&Bitmap);
      SelectObject(hDCBits, hBitmap);
-     bResult = BitBlt(hDC, 0,0, Bitmap.bmWidth, Bitmap.bmHeight, hDCBits, 0, 0, SRCCOPY);
+     bResult = BitBlt(hDC, 0,0, Bitmap.bmWidth, Bitmap.bmHeight, hDCBits, 0, 0, SRCCOPY | CAPTUREBLT);
       InvalidateRect(hwnd,&s,TRUE);
 
 

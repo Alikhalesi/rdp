@@ -86,7 +86,7 @@ public:
     void StartProcess(QString)
     {
         stopped_.test_and_set();
-        while(stopped_.test_and_set())
+        while(true)
         {
              QCoreApplication::processEvents(QEventLoop::AllEvents);
 if(!stopped_.test_and_set())

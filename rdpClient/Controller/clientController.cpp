@@ -6,11 +6,12 @@ ClientController::ClientController(QObject *parent)
     uiUpdaterThread_=new QThread(this);
     channelThread_=new QThread(this);
 
-    std::vector<std::unique_ptr<IChannelInterceptor>> interceptors{} ;
+   std::vector<std::unique_ptr<IChannelInterceptor>> interceptors{} ;
    interceptors.push_back(std::make_unique<LenValInterceptor>());
 
     channel_=new ClientTcpChannel(std::move(interceptors));
-    channel_->SetReadBufferSize(300 * 1024);
+   // channel_->SetReadBufferSize(300 * 1024);
+    //channel_=new ClientTcpChannel();
     connect(channel_,SIGNAL(connected()),this,SIGNAL(connected()),Qt::QueuedConnection);
     connect(channel_,SIGNAL(disconnected()),this,SIGNAL(disconnected()),Qt::QueuedConnection);
     connect(channel_,&ClientTcpChannel::Error,this,&ClientController::onError,Qt::QueuedConnection);

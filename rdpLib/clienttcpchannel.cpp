@@ -106,8 +106,8 @@ void ClientTcpChannel::SocketError(QAbstractSocket::SocketError socketError)
 //=====================================================================================
 void ClientTcpChannel::readyRead()
 {
-auto data=socket_->readAll();
+    auto data = socket_->readAll();
 
-emit dataReadyInternal(data);
+	emit dataReadyInternal(data);
 }
 //=====================================================================================

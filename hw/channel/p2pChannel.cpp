@@ -25,17 +25,20 @@ void P2PChannel::Stop()
 void P2PChannel::NewFrame(unsigned char *data, unsigned int len)
 {
     qDebug()<<"NewFrame:"<<len;
+    qint64 writted = 0;
     if(client_!=nullptr &&   client_->state()==QAbstractSocket::ConnectedState)
     {
       //  qDebug()<<"NewFrame\n";
-      client_->write((char*)(&len),sizeof(unsigned int));
-       client_->waitForBytesWritten();
-       if(client_!=nullptr &&   client_->state()==QAbstractSocket::ConnectedState)
-       {
-     auto written= client_->write((char*)(data),len);
+      writted= client_->write(reinterpret_cast<char*>(&len),sizeof(unsigned int));
+      client_->waitForBytesWritten();
+      assert(writted == sizeof(unsigned int));
+      if (client_ != nullptr && client_->state() == QAbstractSocket::ConnectedState)
+      {
+          writted = client_->write(reinterpret_cast<char*>(data), len);
+          client_->waitForBytesWritten();
+          assert(writted == len);
 
-     client_->waitForBytesWritten();
-       }
+      }
     }
 
 }

@@ -2,13 +2,15 @@
 //===========================================================================================================
 void LenValInterceptor::dataInput(QVariant data)
 {
+    int endSentinel = 1211364875;
 Accept(data);
+
 QByteArray dt=data.toByteArray();
+//qDebug() << dt.toHex();
     qDebug()<<"all msg data: "<<dt.length();
 if(dt.length()<4)
 {
     qDebug()<<"daddddddddddddddddddddddddddddd";
-
 
 }
  qDebug()<<"dtsize "<<dataSize_;
@@ -20,7 +22,7 @@ while(true)
     readedData_.clear();
 
     QByteArray array2;
-    	
+   // qDebug() << dt.toHex();
             array2.resize(4);
             array2[0] = dt.at(0);
             array2[1] = dt.at(1);
@@ -28,18 +30,17 @@ while(true)
             array2[3] = dt.at(3);
             
             memcpy(&dataSize_, array2, sizeof(unsigned int));
-
-            if(dt.length()<5)
-            {
-             break;
-
-
-            }
+         if(dt.length() < 5)
+         {
+             return;
+         }
+            
+            
 qDebug()<<"bef : "<<dt.length();
 
-   dt= dt.left(dt.length()-sizeof(unsigned int));
+   dt= dt.right(dt.length()-sizeof(unsigned int));
    qDebug()<<"after : "<<dt.length();
-    //socket_->read((char*)&dataSize_,sizeof( unsigned int));
+
     qDebug()<<"msg len: "<<dataSize_;
     }
 
@@ -53,12 +54,15 @@ qDebug()<<"bef : "<<dt.length();
     {
         readedData_+=dt;
         dataSize_-=dt.length();
+     
         break;
     }
     else{
+      //  qDebug() << dt.toHex();
         readedData_+=dt.left(dataSize_);
         dt=dt.right(dt.length()-dataSize_);
         dataSize_=0;
+      //  qDebug() << dt.toHex();
         emit  dataOutput(readedData_);
         continue;
     }

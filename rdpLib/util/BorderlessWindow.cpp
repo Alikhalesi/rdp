@@ -116,7 +116,7 @@ BorderlessWindow::BorderlessWindow()
 {
     set_borderless(borderless);
     set_borderless_shadow(borderless_shadow);
-    ::ShowWindow(handle.get(), SW_MAXIMIZE);
+    ::ShowWindow(handle.get(), SW_SHOW);
 }
 
 void BorderlessWindow::set_borderless(bool enabled) {

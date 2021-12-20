@@ -31,6 +31,7 @@ private:
     static uiUpdater* instance_;
     ImageUtil imageUtil_;
      BorderlessWindow showWindow;
+    // QWindow* w;
 };
 
 #endif // UIUPDATER_H

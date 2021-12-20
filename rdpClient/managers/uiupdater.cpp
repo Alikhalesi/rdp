@@ -3,7 +3,10 @@
 uiUpdater::uiUpdater(QObject *parent) : QObject(parent)
 {
     
-    showWindow.set_borderless(true);
+   // showWindow.set_borderless(true);
+   //  w = new QWindow();
+   // w->show();
+	
    
 }
 //==============================================================================
@@ -42,7 +45,8 @@ void uiUpdater::UpdateImage()
      // FrameImageProvider::GetInstance()->SetImageData(copyOfFrame);
        // emit newImage();
 
-        imageUtil_.ConvertJPegToHbitmap(copyOfFrame.first,copyOfFrame.second, showWindow.GetHandle());
+      imageUtil_.ConvertJPegToHbitmap(copyOfFrame.first,copyOfFrame.second, showWindow.GetHandle());
+       // imageUtil_.ConvertJPegToHbitmap(copyOfFrame.first, copyOfFrame.second, (HWND)w->winId());
     }
 
 }
